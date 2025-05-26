@@ -4,10 +4,14 @@ import DAO.CategoriaDAO;
 import DAO.ProdutoDAO;
 import Model.Categoria;
 import Model.Produto;
+import VIEW.MenuPrincipal;
 import java.util.List;
 
 public class A3Final {
     public static void main(String[] args) {
+        
+        MenuPrincipal tela = new MenuPrincipal();
+          tela.setVisible(true);
         try {
             // Instanciando os DAOs
             CategoriaDAO categoriaDAO = new CategoriaDAO();
