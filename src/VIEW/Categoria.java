@@ -1,6 +1,5 @@
 package VIEW;
 
-import Model.Categoria;
 import DAO.CategoriaDAO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -15,10 +14,14 @@ public class Categoria extends JFrame {
     private JTextField txtNome, txtTamanho, txtEmbalagem;
     private CategoriaDAO categoriaDAO;
 
-    public Categoria() {
+    public Categoria(String nome, String tamanho, String embalagem) {
         categoriaDAO = new CategoriaDAO();
         initComponents();
         carregarDados();
+    }
+
+    private Categoria(int id, String nome, String tamanho, String embalagem) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     private void initComponents() {
@@ -105,8 +108,8 @@ public class Categoria extends JFrame {
 
     private void carregarDados() {
         modeloTabela.setRowCount(0);
-        List<Categoria> categorias = categoriaDAO.listarTodos();
-        for (Categoria cat : categorias) {
+        List<Model.Categoria> categorias = categoriaDAO.listarTodos();
+        for (Model.Categoria cat : categorias) {
             modeloTabela.addRow(new Object[]{cat.getId(), cat.getNome(), cat.getTamanho(), cat.getEmbalagem()});
         }
     }

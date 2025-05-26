@@ -144,4 +144,8 @@ public class Produto {
     public ArrayList<Produto> getProdutosAcimaMaximo() {
         return (ArrayList<Produto>) this.dao.listarAcimaDoMaximo();
     }
+
+    public void setVisible(boolean b) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }
