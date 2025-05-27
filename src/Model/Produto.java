@@ -96,7 +96,7 @@ public class Produto {
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
     }
-
+/*
     @Override
     public String toString() {
         return "Produto{" + "id=" + id + ", nome=" + nome + ", precoUnitario=" + precoUnitario
@@ -105,7 +105,7 @@ public class Produto {
                 + ", quantidadeMaxima=" + quantidadeMaxima
                 + ", categoria=" + categoria + '}';
     }
-
+*/
     // Métodos DAO
     public ArrayList<Produto> getMinhaLista() {
         return (ArrayList<Produto>) dao.listarTodos();
@@ -145,7 +145,5 @@ public class Produto {
         return (ArrayList<Produto>) this.dao.listarAcimaDoMaximo();
     }
 
-    public void setVisible(boolean b) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+   
 }

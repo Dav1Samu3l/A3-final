@@ -32,7 +32,7 @@ public class MenuPrincipal extends JFrame {
         btnProdutos.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new Produto().setVisible(true);
+                new ProdutoView().setVisible(true);
             }
         });
         

@@ -1,7 +1,6 @@
 package DAO;
 
 import Model.Categoria;
-import VIEW.Alerta;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +34,7 @@ public class CategoriaDAO {
                 return true;
             }
         } catch (SQLException e) {
-            System.err.println("Erro ao inserir categoria: " + e.getMessage());
+         System.err.println("Erro ao inserir categoria: " + e.getMessage());
         }
         return false;
     }
