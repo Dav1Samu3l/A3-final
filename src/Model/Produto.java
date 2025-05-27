@@ -95,6 +95,7 @@ public class Produto {
 
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
+        
     }
 /*
     @Override
@@ -144,6 +145,10 @@ public class Produto {
     public ArrayList<Produto> getProdutosAcimaMaximo() {
         return (ArrayList<Produto>) this.dao.listarAcimaDoMaximo();
     }
+    
+    public int atualizarQuantidade(){
+        return 0;
+    } 
 
    
 }

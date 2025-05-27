@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.util.List;
 
 public class ProdutoView extends JFrame {
+
     private JTable tabela;
     private DefaultTableModel modeloTabela;
     private JTextField txtNome, txtPreco, txtUnidade, txtQuantidade, txtMin, txtMax;
@@ -28,6 +29,7 @@ public class ProdutoView extends JFrame {
     }
 
     private void initComponents() {
+
         setTitle("Gerenciamento de Produtos");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -97,13 +99,20 @@ public class ProdutoView extends JFrame {
         gbc.gridx = 1;
         formPanel.add(comboCategoria, gbc);
 
-        // Botões (FlowLayout com alinhamento à direita)
+        // Botões
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
         JButton btnAdicionar = new JButton("Adicionar");
         JButton btnEditar = new JButton("Editar");
         JButton btnRemover = new JButton("Remover");
         JButton btnLimpar = new JButton("Limpar");
+        JButton btnEntrada = new JButton("Entrada");
+        JButton btnSaida = new JButton("Saída");
 
+        btnEntrada.addActionListener(e -> atualizarQuantidade(1));
+        btnSaida.addActionListener(e -> atualizarQuantidade(-1));
+
+        buttonPanel.add(btnEntrada);
+        buttonPanel.add(btnSaida);
         buttonPanel.add(btnAdicionar);
         buttonPanel.add(btnEditar);
         buttonPanel.add(btnRemover);
@@ -114,7 +123,11 @@ public class ProdutoView extends JFrame {
         topPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         // ========== TABELA (Com ScrollPane e tamanho preferencial) ==========
-        modeloTabela = new DefaultTableModel(new Object[]{"ID", "Nome", "Preço", "Unidade", "Quantidade", "Categoria"}, 0);
+        modeloTabela = new DefaultTableModel(
+            new Object[]{"ID", "Nome", "Preço", "Unidade", "Quantidade", "Quantidade Mínima", "Quantidade Máxima", "Categoria"}, 
+            0
+        );
+
         tabela = new JTable(modeloTabela);
         JScrollPane scrollPane = new JScrollPane(tabela);
         scrollPane.setPreferredSize(new Dimension(0, 250));
@@ -139,6 +152,56 @@ public class ProdutoView extends JFrame {
     }
 
     // ========== MÉTODOS ==========
+    private void atualizarQuantidade(int operacao) { // 1 para entrada, -1 para saída
+        int selectedRow = tabela.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Selecione um produto!", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Solicita a quantidade ao usuário
+        String input = JOptionPane.showInputDialog(
+            this, 
+            "Quantidade:", 
+            (operacao == 1) ? "Entrada" : "Saída", 
+            JOptionPane.QUESTION_MESSAGE
+        );
+
+        if (input == null || input.trim().isEmpty()) return;
+
+        try {
+            int quantidade = Integer.parseInt(input);
+            int id = (int) tabela.getValueAt(selectedRow, 0); // Coluna 0: ID
+            int quantidadeAtual = (int) tabela.getValueAt(selectedRow, 4); // Coluna 4: Quantidade
+            int quantidadeMinima = (int) tabela.getValueAt(selectedRow, 5); // Coluna 5: Quantidade Mínima
+            int quantidadeMaxima = (int) tabela.getValueAt(selectedRow, 6); // Coluna 6: Quantidade Máxima
+
+            // Atualiza o estoque
+            if (produtoDAO.atualizarQuantidade(id, operacao * quantidade)) {
+                carregarDados();
+
+                // Verifica alertas
+                String mensagem = "";
+                int novaQuantidade = quantidadeAtual + (operacao * quantidade);
+                if (operacao == 1 && novaQuantidade > quantidadeMaxima) {
+                    mensagem = "Atenção: Quantidade acima do máximo!";
+                } else if (operacao == -1 && novaQuantidade < quantidadeMinima) {
+                    mensagem = "Atenção: Quantidade abaixo do mínimo!";
+                }
+
+                if (!mensagem.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, mensagem, "Alerta", JOptionPane.WARNING_MESSAGE);
+                }
+
+                JOptionPane.showMessageDialog(this, "Operação concluída!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Erro na operação!", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Insira um número válido!", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
     private void carregarDados() {
         modeloTabela.setRowCount(0);
         List<Produto> produtos = produtoDAO.listarTodos();
@@ -149,6 +212,8 @@ public class ProdutoView extends JFrame {
                 p.getPrecoUnitario(),
                 p.getUnidade(),
                 p.getQuantidade(),
+                p.getQuantidadeMinima(),
+                p.getQuantidadeMaxima(),
                 p.getCategoria() != null ? p.getCategoria().getNome() : ""
             });
         }
@@ -156,8 +221,8 @@ public class ProdutoView extends JFrame {
 
     private void carregarCategorias() {
         comboCategoria.removeAllItems();
-        List<Model.Categoria> categorias = categoriaDAO.listarTodos();
-        for (Model.Categoria cat : categorias) {
+        List<Categoria> categorias = categoriaDAO.listarTodos();
+        for (Categoria cat : categorias) {
             comboCategoria.addItem(cat);
         }
     }
@@ -245,12 +310,14 @@ public class ProdutoView extends JFrame {
 
     private void preencherCampos() {
         int selectedRow = tabela.getSelectedRow();
-        txtNome.setText(tabela.getValueAt(selectedRow, 1).toString());
-        txtPreco.setText(tabela.getValueAt(selectedRow, 2).toString());
-        txtUnidade.setText(tabela.getValueAt(selectedRow, 3).toString());
-        txtQuantidade.setText(tabela.getValueAt(selectedRow, 4).toString());
-        txtMin.setText(tabela.getValueAt(selectedRow, 5).toString());
-        
+        txtNome.setText(tabela.getValueAt(selectedRow, 1).toString()); // Nome (coluna 1)
+        txtPreco.setText(tabela.getValueAt(selectedRow, 2).toString()); // Preço (coluna 2)
+        txtUnidade.setText(tabela.getValueAt(selectedRow, 3).toString()); // Unidade (coluna 3)
+        txtQuantidade.setText(tabela.getValueAt(selectedRow, 4).toString()); // Quantidade (coluna 4)
+        txtMin.setText(tabela.getValueAt(selectedRow, 5).toString()); // Quantidade Mínima (coluna 5)
+        txtMax.setText(tabela.getValueAt(selectedRow, 6).toString()); // Quantidade Máxima (coluna 6)
+
+        // Atualiza a categoria
         Categoria categoria = (Categoria) comboCategoria.getSelectedItem();
         if (categoria != null) {
             comboCategoria.setSelectedItem(categoria);
@@ -267,4 +334,4 @@ public class ProdutoView extends JFrame {
         comboCategoria.setSelectedIndex(0);
         tabela.clearSelection();
     }
-} 
+}
