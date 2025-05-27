@@ -1,6 +1,7 @@
 package Model;
 
 public class Relatorio {
+
     private String nome;
     private double precoUnitario;
     private String unidade;
@@ -12,10 +13,9 @@ public class Relatorio {
     private String nomeCategoria;
     private int quantidadeProdutos;
 
-    // Construtores
-    public Relatorio() {}
+    public Relatorio() {
+    }
 
-    // Para Lista de Preços
     public Relatorio(String nome, double precoUnitario, String unidade, String categoria) {
         this.nome = nome;
         this.precoUnitario = precoUnitario;
@@ -46,14 +46,43 @@ public class Relatorio {
     }
 
     // Getters
-    public String getNome() { return nome; }
-    public double getPrecoUnitario() { return precoUnitario; }
-    public String getUnidade() { return unidade; }
-    public String getCategoria() { return categoria; }
-    public int getQuantidade() { return quantidade; }
-    public double getValorTotal() { return valorTotal; }
-    public int getQuantidadeMinima() { return quantidadeMinima; }
-    public int getQuantidadeMaxima() { return quantidadeMaxima; }
-    public String getNomeCategoria() { return nomeCategoria; }
-    public int getQuantidadeProdutos() { return quantidadeProdutos; }
+    public String getNome() {
+        return nome;
+    }
+
+    public double getPrecoUnitario() {
+        return precoUnitario;
+    }
+
+    public String getUnidade() {
+        return unidade;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public int getQuantidade() {
+        return quantidade;
+    }
+
+    public double getValorTotal() {
+        return valorTotal;
+    }
+
+    public int getQuantidadeMinima() {
+        return quantidadeMinima;
+    }
+
+    public int getQuantidadeMaxima() {
+        return quantidadeMaxima;
+    }
+
+    public String getNomeCategoria() {
+        return nomeCategoria;
+    }
+
+    public int getQuantidadeProdutos() {
+        return quantidadeProdutos;
+    }
 }

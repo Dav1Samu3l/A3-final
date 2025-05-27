@@ -41,12 +41,12 @@ public class Categoria {
     public String getEmbalagem() { return embalagem; }
     public void setEmbalagem(String embalagem) { this.embalagem = embalagem; }
 
-    @Override
+  /*  @Override
     public String toString() {
         return "Categoria{" + "id=" + id + ", nome=" + nome + 
                ", tamanho=" + tamanho + ", embalagem=" + embalagem + '}';
     }
-
+*/
     // Métodos DAO
     public ArrayList<Categoria> getMinhaLista() {
         return (ArrayList<Categoria>) dao.listarTodos();
