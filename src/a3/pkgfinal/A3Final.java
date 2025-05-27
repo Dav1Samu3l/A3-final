@@ -12,7 +12,7 @@ public class A3Final {
         
         MenuPrincipal tela = new MenuPrincipal();
           tela.setVisible(true);
-        try {
+        /*try {
             // Instanciando os DAOs
             CategoriaDAO categoriaDAO = new CategoriaDAO();
             ProdutoDAO produtoDAO = new ProdutoDAO();
@@ -52,6 +52,6 @@ public class A3Final {
         } catch (Exception e) {
             System.err.println("Erro inesperado: " + e.getMessage());
             e.printStackTrace();
-        }
+        } */
     }
 }

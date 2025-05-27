@@ -17,11 +17,12 @@ public class Categoria extends JFrame {
     public Categoria(String nome, String tamanho, String embalagem) {
         categoriaDAO = new CategoriaDAO();
         initComponents();
+        setMinimumSize(new Dimension(500, 300));
         carregarDados();
     }
 
     private Categoria(int id, String nome, String tamanho, String embalagem) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     private void initComponents() {
@@ -30,6 +31,7 @@ public class Categoria extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
+        // Painel principal com BorderLayout
         JPanel panel = new JPanel(new BorderLayout(10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
@@ -62,40 +64,22 @@ public class Categoria extends JFrame {
         modeloTabela = new DefaultTableModel(new Object[]{"ID", "Nome", "Tamanho", "Embalagem"}, 0);
         tabela = new JTable(modeloTabela);
         JScrollPane scrollPane = new JScrollPane(tabela);
+        scrollPane.setPreferredSize(new Dimension(0, 150)); // Altura fixa, largura flexível
+
+        // Painel superior (formulário + botões)
+        JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.add(formPanel, BorderLayout.NORTH);
+        topPanel.add(buttonPanel, BorderLayout.CENTER);
 
         // Adicionando componentes ao painel principal
-        panel.add(formPanel, BorderLayout.NORTH);
-        panel.add(buttonPanel, BorderLayout.CENTER);
-        panel.add(scrollPane, BorderLayout.SOUTH);
+        panel.add(topPanel, BorderLayout.NORTH);
+        panel.add(scrollPane, BorderLayout.CENTER);
 
         // Listeners
-        btnAdicionar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                adicionarCategoria();
-            }
-        });
-
-        btnEditar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                editarCategoria();
-            }
-        });
-
-        btnRemover.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                removerCategoria();
-            }
-        });
-
-        btnLimpar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                limparCampos();
-            }
-        });
+        btnAdicionar.addActionListener(this::adicionarCategoria);
+        btnEditar.addActionListener(this::editarCategoria);
+        btnRemover.addActionListener(this::removerCategoria);
+        btnLimpar.addActionListener(e -> limparCampos());
 
         tabela.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting() && tabela.getSelectedRow() != -1) {
@@ -114,7 +98,7 @@ public class Categoria extends JFrame {
         }
     }
 
-    private void adicionarCategoria() {
+    private void adicionarCategoria(ActionEvent e) {
         String nome = txtNome.getText();
         String tamanho = txtTamanho.getText();
         String embalagem = txtEmbalagem.getText();
@@ -124,8 +108,7 @@ public class Categoria extends JFrame {
             return;
         }
 
-        Categoria categoria = new Categoria(nome, tamanho, embalagem);
-        if (categoriaDAO.inserir(categoria)) {
+        if (categoriaDAO.inserir(new Model.Categoria(nome, tamanho, embalagem))) {
             JOptionPane.showMessageDialog(this, "Categoria adicionada com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             carregarDados();
             limparCampos();
@@ -134,7 +117,7 @@ public class Categoria extends JFrame {
         }
     }
 
-    private void editarCategoria() {
+    private void editarCategoria(ActionEvent e) {
         int selectedRow = tabela.getSelectedRow();
         if (selectedRow == -1) {
             JOptionPane.showMessageDialog(this, "Selecione uma categoria para editar!", "Aviso", JOptionPane.WARNING_MESSAGE);
@@ -151,7 +134,7 @@ public class Categoria extends JFrame {
             return;
         }
 
-        Categoria categoria = new Categoria(id, nome, tamanho, embalagem);
+        Model.Categoria categoria = new Model.Categoria(id, nome, tamanho, embalagem);
         if (categoriaDAO.atualizar(categoria)) {
             JOptionPane.showMessageDialog(this, "Categoria atualizada com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             carregarDados();
@@ -161,7 +144,7 @@ public class Categoria extends JFrame {
         }
     }
 
-    private void removerCategoria() {
+    private void removerCategoria(ActionEvent e) {
         int selectedRow = tabela.getSelectedRow();
         if (selectedRow == -1) {
             JOptionPane.showMessageDialog(this, "Selecione uma categoria para remover!", "Aviso", JOptionPane.WARNING_MESSAGE);
