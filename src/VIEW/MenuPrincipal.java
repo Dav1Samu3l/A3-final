@@ -24,7 +24,8 @@ public class MenuPrincipal extends JFrame {
         btnCategorias.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new Categoria("", "", "").setVisible(true); // Passa strings vazias como parâmetros
+                new CategoriaView("", "", "").setVisible(true); // Passa strings vazias como parâmetros
+                // new Categoria().setVisible(true);
             }
         });
         

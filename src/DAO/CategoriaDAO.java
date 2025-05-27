@@ -1,6 +1,7 @@
 package DAO;
 
 import Model.Categoria;
+import VIEW.Alerta;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -103,11 +104,11 @@ public class CategoriaDAO {
         return categorias;
     }
 
-    public boolean inserir(VIEW.Categoria categoria) {
+    public boolean inserir(VIEW.CategoriaView categoria) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-    public boolean atualizar(VIEW.Categoria categoria) {
+    public boolean atualizar(VIEW.CategoriaView categoria) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }
