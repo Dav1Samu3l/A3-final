@@ -118,7 +118,7 @@ public class ProdutoView extends JFrame {
         buttonPanel.add(btnRemover);
         buttonPanel.add(btnLimpar);
 
-        // Adicionando formulário e botões ao topPanel
+        //  formulário e botões ao topPanel
         topPanel.add(formPanel, BorderLayout.CENTER);
         topPanel.add(buttonPanel, BorderLayout.SOUTH);
 

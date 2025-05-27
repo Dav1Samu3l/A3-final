@@ -1,6 +1,5 @@
 package VIEW;
 
-import Model.Produto;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -37,17 +36,17 @@ public class MenuPrincipal extends JFrame {
             }
         });
 
-        btnRelatorios.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new Relatorio().setVisible(true);
-            }
-        });
-
         btnSair.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.exit(0);
+            }
+        });
+        btnRelatorios.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Correção: Chame o construtor vazio de RelatorioView
+                new RelatorioView().setVisible(true);
             }
         });
 
