@@ -14,10 +14,12 @@ public class ProdutoView extends JFrame {
 
     private JTable tabela;
     private DefaultTableModel modeloTabela;
-    private JTextField txtNome, txtPreco, txtUnidade, txtQuantidade, txtMin, txtMax;
+    private JTextField txtNome, txtPreco, txtQuantidade, txtMin, txtMax;
     private JComboBox<Categoria> comboCategoria;
     private ProdutoDAO produtoDAO;
     private CategoriaDAO categoriaDAO;
+    private JRadioButton radioUnidade, radioKg, radioLitro, radioMetro, radioCaixa, radioPacote;
+    private ButtonGroup grupoUnidades;
 
     public ProdutoView() {
         produtoDAO = new ProdutoDAO();
@@ -50,11 +52,37 @@ public class ProdutoView extends JFrame {
         // Componentes do formulário
         txtNome = new JTextField(20);
         txtPreco = new JTextField(10);
-        txtUnidade = new JTextField(10);
         txtQuantidade = new JTextField(10);
         txtMin = new JTextField(10);
         txtMax = new JTextField(10);
         comboCategoria = new JComboBox<>();
+
+        // Painel para unidades de medida (radio buttons)
+        JPanel painelUnidades = new JPanel(new GridLayout(0, 3, 5, 2)); // 3 colunas
+        grupoUnidades = new ButtonGroup();
+        
+        radioUnidade = new JRadioButton("Unidade", true);
+        radioKg = new JRadioButton("Kg");
+        radioLitro = new JRadioButton("Litro");
+        radioMetro = new JRadioButton("Metro");
+        radioCaixa = new JRadioButton("Caixa");
+        radioPacote = new JRadioButton("Pacote");
+        
+        // Agrupa os botões
+        grupoUnidades.add(radioUnidade);
+        grupoUnidades.add(radioKg);
+        grupoUnidades.add(radioLitro);
+        grupoUnidades.add(radioMetro);
+        grupoUnidades.add(radioCaixa);
+        grupoUnidades.add(radioPacote);
+        
+        // Adiciona ao painel
+        painelUnidades.add(radioUnidade);
+        painelUnidades.add(radioKg);
+        painelUnidades.add(radioLitro);
+        painelUnidades.add(radioMetro);
+        painelUnidades.add(radioCaixa);
+        painelUnidades.add(radioPacote);
 
         // Adicionando componentes ao formulário
         gbc.gridx = 0;
@@ -73,7 +101,7 @@ public class ProdutoView extends JFrame {
         gbc.gridy = 2;
         formPanel.add(new JLabel("Unidade:"), gbc);
         gbc.gridx = 1;
-        formPanel.add(txtUnidade, gbc);
+        formPanel.add(painelUnidades, gbc);  // Radio buttons no lugar do campo de texto
 
         gbc.gridx = 0;
         gbc.gridy = 3;
@@ -118,7 +146,7 @@ public class ProdutoView extends JFrame {
         buttonPanel.add(btnRemover);
         buttonPanel.add(btnLimpar);
 
-        // formulário e botões ao topPanel
+        // Adiciona formulário e botões ao topPanel
         topPanel.add(formPanel, BorderLayout.CENTER);
         topPanel.add(buttonPanel, BorderLayout.SOUTH);
 
@@ -163,17 +191,6 @@ public class ProdutoView extends JFrame {
         String input = JOptionPane.showInputDialog(
                 this,
                 "Quantidade:",
-
-                /*
-                 * String resultado;
-                 * if (operacao == 1) {
-                 * resultado = "Entrada";
-                 * } else {
-                 * resultado = "Saída";
-                 * }
-                 * return resultado;
-                 */
-
                 (operacao == 1) ? "Entrada" : "Saída",
                 JOptionPane.QUESTION_MESSAGE);
 
@@ -239,17 +256,27 @@ public class ProdutoView extends JFrame {
         }
     }
 
+    private String getUnidadeSelecionada() {
+        if (radioUnidade.isSelected()) return "Unidade";
+        if (radioKg.isSelected()) return "Kg";
+        if (radioLitro.isSelected()) return "Litro";
+        if (radioMetro.isSelected()) return "Metro";
+        if (radioCaixa.isSelected()) return "Caixa";
+        if (radioPacote.isSelected()) return "Pacote";
+        return "Unidade"; // Padrão
+    }
+
     private void adicionarProduto(ActionEvent e) {
         try {
             String nome = txtNome.getText();
             double preco = Double.parseDouble(txtPreco.getText());
-            String unidade = txtUnidade.getText();
+            String unidade = getUnidadeSelecionada(); // Obtém do radio button
             int quantidade = Integer.parseInt(txtQuantidade.getText());
             int min = Integer.parseInt(txtMin.getText());
             int max = Integer.parseInt(txtMax.getText());
             Categoria categoria = (Categoria) comboCategoria.getSelectedItem();
 
-            if (nome.isEmpty() || unidade.isEmpty()) {
+            if (nome.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Preencha todos os campos!", "Erro", JOptionPane.ERROR_MESSAGE);
                 return;
             }
@@ -260,6 +287,7 @@ public class ProdutoView extends JFrame {
                 carregarDados();
                 limparCampos();
             } else {
+               
                 JOptionPane.showMessageDialog(this, "Erro ao adicionar!", "Erro", JOptionPane.ERROR_MESSAGE);
             }
         } catch (NumberFormatException ex) {
@@ -278,13 +306,13 @@ public class ProdutoView extends JFrame {
             int id = (int) tabela.getValueAt(selectedRow, 0);
             String nome = txtNome.getText();
             double preco = Double.parseDouble(txtPreco.getText());
-            String unidade = txtUnidade.getText();
+            String unidade = getUnidadeSelecionada(); // Obtém do radio button
             int quantidade = Integer.parseInt(txtQuantidade.getText());
             int min = Integer.parseInt(txtMin.getText());
             int max = Integer.parseInt(txtMax.getText());
             Categoria categoria = (Categoria) comboCategoria.getSelectedItem();
 
-            if (nome.isEmpty() || unidade.isEmpty()) {
+            if (nome.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Preencha todos os campos!", "Erro", JOptionPane.ERROR_MESSAGE);
                 return;
             }
@@ -322,29 +350,40 @@ public class ProdutoView extends JFrame {
 
     private void preencherCampos() {
         int selectedRow = tabela.getSelectedRow();
-        txtNome.setText(tabela.getValueAt(selectedRow, 1).toString()); // Nome (coluna 1)
-        txtPreco.setText(tabela.getValueAt(selectedRow, 2).toString()); // Preço (coluna 2)
-        txtUnidade.setText(tabela.getValueAt(selectedRow, 3).toString()); // Unidade (coluna 3)
-        txtQuantidade.setText(tabela.getValueAt(selectedRow, 4).toString()); // Quantidade (coluna 4)
-        txtMin.setText(tabela.getValueAt(selectedRow, 5).toString()); // Quantidade Mínima (coluna 5)
-        txtMax.setText(tabela.getValueAt(selectedRow, 6).toString()); // Quantidade Máxima (coluna 6)
+        txtNome.setText(tabela.getValueAt(selectedRow, 1).toString()); 
+        txtPreco.setText(tabela.getValueAt(selectedRow, 2).toString()); 
+        txtQuantidade.setText(tabela.getValueAt(selectedRow, 4).toString()); 
+        txtMin.setText(tabela.getValueAt(selectedRow, 5).toString());
+        txtMax.setText(tabela.getValueAt(selectedRow, 6).toString()); 
+
+        // unidade via radio buttons
+        String unidade = tabela.getValueAt(selectedRow, 3).toString(); 
+        if (unidade.equals("Unidade")) radioUnidade.setSelected(true);
+        else if (unidade.equals("Kg")) radioKg.setSelected(true);
+        else if (unidade.equals("Litro")) radioLitro.setSelected(true);
+        else if (unidade.equals("Metro")) radioMetro.setSelected(true);
+        else if (unidade.equals("Caixa")) radioCaixa.setSelected(true);
+        else if (unidade.equals("Pacote")) radioPacote.setSelected(true);
+        else radioUnidade.setSelected(true); // Padrão
 
         // Atualiza a categoria
-        Categoria categoria = (Categoria) comboCategoria.getSelectedItem();
         String nomeCategoria = tabela.getValueAt(selectedRow, 7).toString();
-        comboCategoria.setSelectedItem(nomeCategoria);
-        if (categoria != null) {
-            comboCategoria.setSelectedItem(categoria);
+        for (int i = 0; i < comboCategoria.getItemCount(); i++) {
+            Categoria cat = comboCategoria.getItemAt(i);
+            if (cat.toString().equals(nomeCategoria)) {
+                comboCategoria.setSelectedItem(cat);
+                break;
+            }
         }
     }
 
     private void limparCampos() {
         txtNome.setText("");
         txtPreco.setText("");
-        txtUnidade.setText("");
         txtQuantidade.setText("");
         txtMin.setText("");
         txtMax.setText("");
+        radioUnidade.setSelected(false);
         comboCategoria.setSelectedIndex(0);
         tabela.clearSelection();
     }
