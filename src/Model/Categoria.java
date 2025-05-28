@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Categoria {
+
     // Atributos
     private int id;
     private String nome;
@@ -32,21 +33,44 @@ public class Categoria {
     }
 
     // Getters e Setters
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
-    public String getNome() { return nome; }
-    public void setNome(String nome) { this.nome = nome; }
-    public String getTamanho() { return tamanho; }
-    public void setTamanho(String tamanho) { this.tamanho = tamanho; }
-    public String getEmbalagem() { return embalagem; }
-    public void setEmbalagem(String embalagem) { this.embalagem = embalagem; }
+    public int getId() {
+        return id;
+    }
 
-  /*  @Override
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getTamanho() {
+        return tamanho;
+    }
+
+    public void setTamanho(String tamanho) {
+        this.tamanho = tamanho;
+    }
+
+    public String getEmbalagem() {
+        return embalagem;
+    }
+
+    public void setEmbalagem(String embalagem) {
+        this.embalagem = embalagem;
+    }
+
+    /*  @Override
     public String toString() {
         return "Categoria{" + "id=" + id + ", nome=" + nome + 
                ", tamanho=" + tamanho + ", embalagem=" + embalagem + '}';
     }
-*/
+     */
     // Métodos DAO
     public ArrayList<Categoria> getMinhaLista() {
         return (ArrayList<Categoria>) dao.listarTodos();
