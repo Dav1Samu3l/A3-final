@@ -45,7 +45,6 @@ public class MenuPrincipal extends JFrame {
         btnRelatorios.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Correção: Chame o construtor vazio de RelatorioView
                 new RelatorioView().setVisible(true);
             }
         });
