@@ -71,6 +71,11 @@ public class Categoria {
                ", tamanho=" + tamanho + ", embalagem=" + embalagem + '}';
     }
      */
+    @Override
+    public String toString() {
+        return this.nome; 
+    }
+
     // Métodos DAO
     public ArrayList<Categoria> getMinhaLista() {
         return (ArrayList<Categoria>) dao.listarTodos();
