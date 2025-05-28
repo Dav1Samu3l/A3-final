@@ -118,15 +118,15 @@ public class ProdutoView extends JFrame {
         buttonPanel.add(btnRemover);
         buttonPanel.add(btnLimpar);
 
-        //  formulário e botões ao topPanel
+        // formulário e botões ao topPanel
         topPanel.add(formPanel, BorderLayout.CENTER);
         topPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         // ========== TABELA (Com ScrollPane e tamanho preferencial) ==========
         modeloTabela = new DefaultTableModel(
-            new Object[]{"ID", "Nome", "Preço", "Unidade", "Quantidade", "Quantidade Mínima", "Quantidade Máxima", "Categoria"}, 
-            0
-        );
+                new Object[] { "ID", "Nome", "Preço", "Unidade", "Quantidade", "Quantidade Mínima", "Quantidade Máxima",
+                        "Categoria" },
+                0);
 
         tabela = new JTable(modeloTabela);
         JScrollPane scrollPane = new JScrollPane(tabela);
@@ -161,13 +161,25 @@ public class ProdutoView extends JFrame {
 
         // Solicita a quantidade ao usuário
         String input = JOptionPane.showInputDialog(
-            this, 
-            "Quantidade:", 
-            (operacao == 1) ? "Entrada" : "Saída", 
-            JOptionPane.QUESTION_MESSAGE
-        );
+                this,
+                "Quantidade:",
 
-        if (input == null || input.trim().isEmpty()) return;
+                /*
+                 * String resultado;
+                 * if (operacao == 1) {
+                 * resultado = "Entrada";
+                 * } else {
+                 * resultado = "Saída";
+                 * }
+                 * return resultado;
+                 */
+
+                (operacao == 1) ? "Entrada" : "Saída",
+                JOptionPane.QUESTION_MESSAGE);
+
+        if (input == null || input.trim().isEmpty()) {
+            return;
+        }
 
         try {
             int quantidade = Integer.parseInt(input);
@@ -206,15 +218,15 @@ public class ProdutoView extends JFrame {
         modeloTabela.setRowCount(0);
         List<Produto> produtos = produtoDAO.listarTodos();
         for (Produto p : produtos) {
-            modeloTabela.addRow(new Object[]{
-                p.getId(),
-                p.getNome(),
-                p.getPrecoUnitario(),
-                p.getUnidade(),
-                p.getQuantidade(),
-                p.getQuantidadeMinima(),
-                p.getQuantidadeMaxima(),
-                p.getCategoria() != null ? p.getCategoria().getNome() : ""
+            modeloTabela.addRow(new Object[] {
+                    p.getId(),
+                    p.getNome(),
+                    p.getPrecoUnitario(),
+                    p.getUnidade(),
+                    p.getQuantidade(),
+                    p.getQuantidadeMinima(),
+                    p.getQuantidadeMaxima(),
+                    p.getCategoria()
             });
         }
     }
@@ -319,6 +331,8 @@ public class ProdutoView extends JFrame {
 
         // Atualiza a categoria
         Categoria categoria = (Categoria) comboCategoria.getSelectedItem();
+        String nomeCategoria = tabela.getValueAt(selectedRow, 7).toString();
+        comboCategoria.setSelectedItem(nomeCategoria);
         if (categoria != null) {
             comboCategoria.setSelectedItem(categoria);
         }
