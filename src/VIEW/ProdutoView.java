@@ -31,7 +31,6 @@ public class ProdutoView extends JFrame {
     }
 
     private void initComponents() {
-
         setTitle("Gerenciamento de Produtos");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -43,11 +42,12 @@ public class ProdutoView extends JFrame {
         // ========== PAINEL SUPERIOR (Formulário + Botões) ==========
         JPanel topPanel = new JPanel(new BorderLayout(10, 10));
 
-        // Formulário (GridBagLayout para maior controle)
+        // Formulário com GridBagLayout para alinhamento preciso
         JPanel formPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
         // Componentes do formulário
         txtNome = new JTextField(20);
@@ -58,7 +58,7 @@ public class ProdutoView extends JFrame {
         comboCategoria = new JComboBox<>();
 
         // Painel para unidades de medida (radio buttons)
-        JPanel painelUnidades = new JPanel(new GridLayout(0, 3, 5, 2)); // 3 colunas
+        JPanel painelUnidades = new JPanel(new FlowLayout(FlowLayout.LEFT));
         grupoUnidades = new ButtonGroup();
         
         radioUnidade = new JRadioButton("Unidade", true);
@@ -84,51 +84,79 @@ public class ProdutoView extends JFrame {
         painelUnidades.add(radioCaixa);
         painelUnidades.add(radioPacote);
 
-        // Adicionando componentes ao formulário
+        // ========== ADICIONANDO COMPONENTES AO FORMULÁRIO ==========
+        // Linha 1: Nome
         gbc.gridx = 0;
         gbc.gridy = 0;
+        gbc.weightx = 0.1;
         formPanel.add(new JLabel("Nome:"), gbc);
+
         gbc.gridx = 1;
+        gbc.weightx = 0.9;
         formPanel.add(txtNome, gbc);
 
+        // Linha 2: Preço
         gbc.gridx = 0;
         gbc.gridy = 1;
+        gbc.weightx = 0.1;
         formPanel.add(new JLabel("Preço Unitário:"), gbc);
+
         gbc.gridx = 1;
+        gbc.weightx = 0.9;
         formPanel.add(txtPreco, gbc);
 
+        // Linha 3: Unidade
         gbc.gridx = 0;
         gbc.gridy = 2;
+        gbc.weightx = 0.1;
         formPanel.add(new JLabel("Unidade:"), gbc);
-        gbc.gridx = 1;
-        formPanel.add(painelUnidades, gbc);  // Radio buttons no lugar do campo de texto
 
+        gbc.gridx = 1;
+        gbc.weightx = 0.9;
+        formPanel.add(painelUnidades, gbc);
+
+        // Linha 4: Quantidade
         gbc.gridx = 0;
         gbc.gridy = 3;
+        gbc.weightx = 0.1;
         formPanel.add(new JLabel("Quantidade:"), gbc);
+
         gbc.gridx = 1;
+        gbc.weightx = 0.9;
         formPanel.add(txtQuantidade, gbc);
 
+        // Linha 5: Quantidade Mínima
         gbc.gridx = 0;
         gbc.gridy = 4;
+        gbc.weightx = 0.1;
         formPanel.add(new JLabel("Quantidade Mínima:"), gbc);
+
         gbc.gridx = 1;
+        gbc.weightx = 0.9;
         formPanel.add(txtMin, gbc);
 
+        // Linha 6: Quantidade Máxima
         gbc.gridx = 0;
         gbc.gridy = 5;
+        gbc.weightx = 0.1;
         formPanel.add(new JLabel("Quantidade Máxima:"), gbc);
+
         gbc.gridx = 1;
+        gbc.weightx = 0.9;
         formPanel.add(txtMax, gbc);
 
+        // Linha 7: Categoria
         gbc.gridx = 0;
         gbc.gridy = 6;
+        gbc.weightx = 0.1;
         formPanel.add(new JLabel("Categoria:"), gbc);
+
         gbc.gridx = 1;
+        gbc.weightx = 0.9;
         formPanel.add(comboCategoria, gbc);
 
-        // Botões
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+        // ========== BOTÕES ==========
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
         JButton btnAdicionar = new JButton("Adicionar");
         JButton btnEditar = new JButton("Editar");
         JButton btnRemover = new JButton("Remover");
@@ -150,7 +178,7 @@ public class ProdutoView extends JFrame {
         topPanel.add(formPanel, BorderLayout.CENTER);
         topPanel.add(buttonPanel, BorderLayout.SOUTH);
 
-        // ========== TABELA (Com ScrollPane e tamanho preferencial) ==========
+        // ========== TABELA ==========
         modeloTabela = new DefaultTableModel(
                 new Object[] { "ID", "Nome", "Preço", "Unidade", "Quantidade", "Quantidade Mínima", "Quantidade Máxima",
                         "Categoria" },

@@ -41,10 +41,16 @@ public class CategoriaView extends JFrame {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Formulário
-        JPanel formPanel = new JPanel(new GridLayout(3, 2, 5, 5));
-        txtNome = new JTextField();
-
+        // ========== FORMULÁRIO COM GRIDBAGLAYOUT ==========
+        JPanel formPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        
+        // Componentes
+        txtNome = new JTextField(20);
+        
         // Tamanho (Pequeno, Médio, Grande)
         grupoTamanho = new ButtonGroup();
         JPanel tamanhoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -75,15 +81,39 @@ public class CategoriaView extends JFrame {
         embalagemPanel.add(rbVidro);
         embalagemPanel.add(rbPlastico);
 
-        formPanel.add(new JLabel("Nome:"));
-        formPanel.add(txtNome);
-        formPanel.add(new JLabel("Tamanho:"));
-        formPanel.add(tamanhoPanel);
-        formPanel.add(new JLabel("Embalagem:"));
-        formPanel.add(embalagemPanel);
+        // ========== ADICIONANDO COMPONENTES AO FORMULÁRIO ==========
+        // Linha 1: Nome
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 0.1;
+        formPanel.add(new JLabel("Nome:"), gbc);
 
-        // Botões
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        gbc.gridx = 1;
+        gbc.weightx = 0.9;
+        formPanel.add(txtNome, gbc);
+
+        // Linha 2: Tamanho
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.weightx = 0.1;
+        formPanel.add(new JLabel("Tamanho:"), gbc);
+
+        gbc.gridx = 1;
+        gbc.weightx = 0.9;
+        formPanel.add(tamanhoPanel, gbc);
+
+        // Linha 3: Embalagem
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.weightx = 0.1;
+        formPanel.add(new JLabel("Embalagem:"), gbc);
+
+        gbc.gridx = 1;
+        gbc.weightx = 0.9;
+        formPanel.add(embalagemPanel, gbc);
+
+        // ========== BOTÕES ==========
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10)); // Alinhado à esquerda
         JButton btnAdicionar = new JButton("Adicionar");
         JButton btnEditar = new JButton("Editar");
         JButton btnRemover = new JButton("Remover");
@@ -94,7 +124,7 @@ public class CategoriaView extends JFrame {
         buttonPanel.add(btnRemover);
         buttonPanel.add(btnLimpar);
 
-        // Tabela
+        // ========== TABELA ==========
         modeloTabela = new DefaultTableModel(new Object[]{"ID", "Nome", "Tamanho", "Embalagem"}, 0);
         tabela = new JTable(modeloTabela);
         JScrollPane scrollPane = new JScrollPane(tabela);
@@ -107,7 +137,7 @@ public class CategoriaView extends JFrame {
         panel.add(topPanel, BorderLayout.NORTH);
         panel.add(scrollPane, BorderLayout.CENTER);
 
-        // Listeners
+        // ========== LISTENERS ==========
         btnAdicionar.addActionListener(this::adicionarCategoria);
         btnEditar.addActionListener(this::editarCategoria);
         btnRemover.addActionListener(this::removerCategoria);
