@@ -161,19 +161,42 @@ public class ProdutoDAO {
     }
 
     // Métodos específicos para estoque
-    public boolean atualizarQuantidade(int produtoId, int quantidade) {
-        String sql = "UPDATE produto SET quantidade = quantidade + ? WHERE id = ?";
+   public boolean atualizarQuantidade(int id, int quantidadeVariacao) {
 
-        try (Connection conexao = ConnectionFactory.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql)) {
-
-            stmt.setInt(1, quantidade);
-            stmt.setInt(2, produtoId);
-            return stmt.executeUpdate() > 0;
+       if (quantidadeVariacao < 0) {
+        String sqlVerificaEstoque = "SELECT quantidade FROM produto WHERE id = ?";
+        try (Connection conexao = ConnectionFactory.getConnection();
+             PreparedStatement stmtVerifica = conexao.prepareStatement(sqlVerificaEstoque)) {
+            
+            stmtVerifica.setInt(1, id);
+            ResultSet rs = stmtVerifica.executeQuery();
+            
+            if (rs.next()) {
+                int estoqueAtual = rs.getInt("quantidade");
+                if (estoqueAtual + quantidadeVariacao < 0) {
+                    throw new IllegalArgumentException("Quantidade insuficiente em estoque");
+                }
+            }
         } catch (SQLException e) {
-            System.err.println("Erro ao atualizar quantidade: " + e.getMessage());
+            System.err.println("Erro ao verificar estoque: " + e.getMessage());
+            return false;
         }
-        return false;
     }
+
+    // Atualização do estoque
+    String sqlAtualiza = "UPDATE produto SET quantidade = quantidade + ? WHERE id = ?";
+    try (Connection conexao = ConnectionFactory.getConnection();
+         PreparedStatement stmtAtualiza = conexao.prepareStatement(sqlAtualiza)) {
+        
+        stmtAtualiza.setInt(1, quantidadeVariacao);
+        stmtAtualiza.setInt(2, id);
+        
+        return stmtAtualiza.executeUpdate() > 0;
+    } catch (SQLException e) {
+        System.err.println("Erro ao atualizar quantidade: " + e.getMessage());
+    }
+    return false;
+}
 
     public List<Produto> listarAbaixoDoMinimo() {
         List<Produto> produtos = new ArrayList<>();

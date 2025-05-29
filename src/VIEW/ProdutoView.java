@@ -200,10 +200,19 @@ public class ProdutoView extends JFrame {
 
         try {
             int quantidade = Integer.parseInt(input);
-            int id = (int) tabela.getValueAt(selectedRow, 0); // Coluna 0: ID
-            int quantidadeAtual = (int) tabela.getValueAt(selectedRow, 4); // Coluna 4: Quantidade
-            int quantidadeMinima = (int) tabela.getValueAt(selectedRow, 5); // Coluna 5: Quantidade Mínima
-            int quantidadeMaxima = (int) tabela.getValueAt(selectedRow, 6); // Coluna 6: Quantidade Máxima
+            int id = (int) tabela.getValueAt(selectedRow, 0);
+            int quantidadeAtual = (int) tabela.getValueAt(selectedRow, 4);
+            int quantidadeMinima = (int) tabela.getValueAt(selectedRow, 5); 
+            int quantidadeMaxima = (int) tabela.getValueAt(selectedRow, 6); 
+
+            // VALIDAÇÃO SIMPLES PARA SAÍDAS - IMPEDIR QUANTIDADE NEGATIVA
+            if (operacao == -1 && quantidade > quantidadeAtual) {
+                JOptionPane.showMessageDialog(this, 
+                    "Estoque insuficiente!\nQuantidade disponível: " + quantidadeAtual, 
+                    "Erro", 
+                    JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
             // Atualiza o estoque
             if (produtoDAO.atualizarQuantidade(id, operacao * quantidade)) {
@@ -287,7 +296,6 @@ public class ProdutoView extends JFrame {
                 carregarDados();
                 limparCampos();
             } else {
-               
                 JOptionPane.showMessageDialog(this, "Erro ao adicionar!", "Erro", JOptionPane.ERROR_MESSAGE);
             }
         } catch (NumberFormatException ex) {
@@ -350,14 +358,14 @@ public class ProdutoView extends JFrame {
 
     private void preencherCampos() {
         int selectedRow = tabela.getSelectedRow();
-        txtNome.setText(tabela.getValueAt(selectedRow, 1).toString()); 
-        txtPreco.setText(tabela.getValueAt(selectedRow, 2).toString()); 
-        txtQuantidade.setText(tabela.getValueAt(selectedRow, 4).toString()); 
-        txtMin.setText(tabela.getValueAt(selectedRow, 5).toString());
-        txtMax.setText(tabela.getValueAt(selectedRow, 6).toString()); 
+        txtNome.setText(tabela.getValueAt(selectedRow, 1).toString()); // Nome (coluna 1)
+        txtPreco.setText(tabela.getValueAt(selectedRow, 2).toString()); // Preço (coluna 2)
+        txtQuantidade.setText(tabela.getValueAt(selectedRow, 4).toString()); // Quantidade (coluna 4)
+        txtMin.setText(tabela.getValueAt(selectedRow, 5).toString()); // Quantidade Mínima (coluna 5)
+        txtMax.setText(tabela.getValueAt(selectedRow, 6).toString()); // Quantidade Máxima (coluna 6)
 
-        // unidade via radio buttons
-        String unidade = tabela.getValueAt(selectedRow, 3).toString(); 
+        // Atualiza a unidade via radio buttons
+        String unidade = tabela.getValueAt(selectedRow, 3).toString(); // Unidade (coluna 3)
         if (unidade.equals("Unidade")) radioUnidade.setSelected(true);
         else if (unidade.equals("Kg")) radioKg.setSelected(true);
         else if (unidade.equals("Litro")) radioLitro.setSelected(true);
@@ -383,7 +391,7 @@ public class ProdutoView extends JFrame {
         txtQuantidade.setText("");
         txtMin.setText("");
         txtMax.setText("");
-        radioUnidade.setSelected(false);
+        radioUnidade.setSelected(true); 
         comboCategoria.setSelectedIndex(0);
         tabela.clearSelection();
     }
