@@ -14,16 +14,16 @@ Este projeto é um sistema desktop para gerenciamento de estoque, desenvolvido e
 
 ```
 src/
-  a3/pkgfinal/A3Final.java         # Classe principal
-  DAO/                             # Acesso a dados (JDBC)
+  a3/pkgfinal/A3Final.java          
+  DAO/                              
     CategoriaDAO.java
     ProdutoDAO.java
     ConnectionFactory.java
-  Model/                           # Modelos de domínio
+  Model/                          
     Categoria.java
     Produto.java
     Relatorio.java
-  VIEW/                            # Telas Swing
+  VIEW/                            
     CategoriaView.java
     ProdutoView.java
     RelatorioView.java
