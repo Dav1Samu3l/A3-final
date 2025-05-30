@@ -12,7 +12,9 @@ public class CategoriaDAO {
 
     public int maiorID() throws SQLException {
         String sql = "SELECT MAX(id) FROM categoria";
-        try (Connection conexao = ConnectionFactory.getConnection(); Statement stmt = conexao.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+        try (Connection conexao = ConnectionFactory.getConnection();
+                Statement stmt = conexao.createStatement();
+                ResultSet rs = stmt.executeQuery(sql)) {
             /*int resultado;
             if (rs.next()) {
                 resultado = rs.getInt(1);
@@ -20,7 +22,7 @@ public class CategoriaDAO {
                 resultado = 0;
             }
             return resultado;
-*/
+             */
             return rs.next() ? rs.getInt(1) : 0;
         }
     }
@@ -28,7 +30,8 @@ public class CategoriaDAO {
     public boolean inserir(Categoria categoria) {
         String sql = "INSERT INTO categoria (nome, tamanho, embalagem) VALUES (?, ?, ?)";
 
-        try (Connection conexao = ConnectionFactory.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection conexao = ConnectionFactory.getConnection();
+                PreparedStatement stmt = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             stmt.setString(1, categoria.getNome());
             stmt.setString(2, categoria.getTamanho());

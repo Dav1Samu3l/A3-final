@@ -16,6 +16,14 @@ public class A3Final {
 
         MenuPrincipal tela = new MenuPrincipal();
         tela.setVisible(true);
+        
+        
+        
+        
+        
+        
+        
+        
         /*try {
             // Instanciando os DAOs
             CategoriaDAO categoriaDAO = new CategoriaDAO();
