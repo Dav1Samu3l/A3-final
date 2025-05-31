@@ -77,29 +77,5 @@ public class Categoria {
     }
 
     // Métodos DAO
-    public ArrayList<Categoria> getMinhaLista() {
-        return (ArrayList<Categoria>) dao.listarTodos();
-    }
-
-    public boolean insertCategoriaBD() throws SQLException {
-        int id = this.dao.maiorID() + 1;
-        this.setId(id);
-        return this.dao.inserir(this);
-    }
-
-    public boolean deleteCategoriaBD() {
-        return this.dao.deletar(this.id);
-    }
-
-    public boolean updateCategoriaBD() {
-        return this.dao.atualizar(this);
-    }
-
-    public Categoria carregaCategoria(int id) {
-        return this.dao.buscarPorId(id);
-    }
-
-    public int maiorID() throws SQLException {
-        return this.dao.maiorID();
-    }
+   
 }

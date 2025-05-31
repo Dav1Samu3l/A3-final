@@ -108,47 +108,5 @@ public class Produto {
     }
 */
     // Métodos DAO
-    public ArrayList<Produto> getMinhaLista() {
-        return (ArrayList<Produto>) dao.listarTodos();
-    }
-
-    public boolean insertProdutoBD() throws SQLException {
-        int id = this.dao.maiorID() + 1;
-        this.setId(id);
-        return this.dao.inserir(this);
-    }
-
-    public boolean deleteProdutoBD() {
-        return this.dao.deletar(this.id);
-    }
-
-    public boolean updateProdutoBD() {
-        return this.dao.atualizar(this);
-    }
-
-    public Produto carregaProduto(int id) {
-        return this.dao.buscarPorId(id);
-    }
-
-    public int maiorID() throws SQLException {
-        return this.dao.maiorID();
-    }
-
-    public boolean atualizarQuantidade(int quantidade) {
-        return this.dao.atualizarQuantidade(this.id, quantidade);
-    }
-
-    public ArrayList<Produto> getProdutosAbaixoMinimo() {
-        return (ArrayList<Produto>) this.dao.listarAbaixoDoMinimo();
-    }
-
-    public ArrayList<Produto> getProdutosAcimaMaximo() {
-        return (ArrayList<Produto>) this.dao.listarAcimaDoMaximo();
-    }
-    
-    public int atualizarQuantidade(){
-        return 0;
-    } 
-
    
 }
