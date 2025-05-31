@@ -62,6 +62,11 @@ public class CategoriaDAO {
     }
 
     public boolean deletar(int id) {
+        // Verifica se existem produtos associados
+        if (existemProdutosAssociados(id)) {
+            return false;
+        }
+        
         String sql = "DELETE FROM categoria WHERE id=?";
 
         try (Connection conexao = ConnectionFactory.getConnection(); 
@@ -71,6 +76,25 @@ public class CategoriaDAO {
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             System.err.println("Erro ao deletar categoria: " + e.getMessage());
+        }
+        return false;
+    }
+
+    // método para verificar produtos associados
+    private boolean existemProdutosAssociados(int categoriaId) {
+        String sql = "SELECT COUNT(*) FROM produto WHERE categoria_id = ?";
+        
+        try (Connection conexao = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conexao.prepareStatement(sql)) {
+            
+            stmt.setInt(1, categoriaId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro ao verificar produtos associados: " + e.getMessage());
         }
         return false;
     }

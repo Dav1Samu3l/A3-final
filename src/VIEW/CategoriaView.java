@@ -214,12 +214,19 @@ public class CategoriaView extends JFrame {
         }
 
         int id = (int) tabela.getValueAt(selectedRow, 0);
+        String nomeCategoria = tabela.getValueAt(selectedRow, 1).toString();
+        
         if (categoriaDAO.deletar(id)) {
             JOptionPane.showMessageDialog(this, "Categoria removida com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             carregarDados();
             limparCampos();
         } else {
-            JOptionPane.showMessageDialog(this, "Erro ao remover categoria!", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, 
+                "Não é possível excluir '" + nomeCategoria + "'!\n\n" +
+                "Motivo: Existem produtos associados a esta categoria.\n" +
+                "Remova primeiro os produtos ou altere sua categoria.",
+                "Erro: Categoria com Produtos Associados",
+                JOptionPane.ERROR_MESSAGE);
         }
     }
 
