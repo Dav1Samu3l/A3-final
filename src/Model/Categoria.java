@@ -1,8 +1,6 @@
 package Model;
 
 import DAO.CategoriaDAO;
-import java.sql.SQLException;
-import java.util.ArrayList;
 
 public class Categoria {
 
@@ -11,17 +9,14 @@ public class Categoria {
     private String nome;
     private String tamanho;
     private String embalagem;
-    private final CategoriaDAO dao;
 
     public Categoria() {
-        this.dao = new CategoriaDAO();
     }
 
     public Categoria(String nome, String tamanho, String embalagem) {
         this.nome = nome;
         this.tamanho = tamanho;
         this.embalagem = embalagem;
-        this.dao = new CategoriaDAO();
     }
 
     public Categoria(int id, String nome, String tamanho, String embalagem) {
@@ -29,7 +24,6 @@ public class Categoria {
         this.nome = nome;
         this.tamanho = tamanho;
         this.embalagem = embalagem;
-        this.dao = new CategoriaDAO();
     }
 
     // Getters e Setters
