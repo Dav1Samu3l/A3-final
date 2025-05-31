@@ -1,6 +1,6 @@
 package Model;
 
-import DAO.CategoriaDAO;
+
 
 public class Categoria {
 
