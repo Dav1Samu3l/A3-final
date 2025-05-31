@@ -15,7 +15,8 @@ public class MenuPrincipal extends JFrame {
     public MenuPrincipal() {
         setTitle("Sistema de Controle de Estoque");
         setSize(400, 300);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // metodo para feixar tod a aplicação
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);// abilita botão close
         setLocationRelativeTo(null);
 
         // Painel principal com BorderLayout para centralização
@@ -28,7 +29,7 @@ public class MenuPrincipal extends JFrame {
         JButton btnRelatorios = new JButton("Relatórios");
         JButton btnSair = new JButton("Sair");
 
-        // Define um tamanho fixo para os botões
+        // efine um tamanho fixo para os botões
         Dimension buttonSize = new Dimension(180, 45);
         btnCategorias.setPreferredSize(buttonSize);
         btnProdutos.setPreferredSize(buttonSize);

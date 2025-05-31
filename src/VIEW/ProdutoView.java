@@ -60,14 +60,14 @@ public class ProdutoView extends JFrame {
         // Painel para unidades de medida (radio buttons)
         JPanel painelUnidades = new JPanel(new FlowLayout(FlowLayout.LEFT));
         grupoUnidades = new ButtonGroup();
-        
+
         radioUnidade = new JRadioButton("Unidade", true);
         radioKg = new JRadioButton("Kg");
         radioLitro = new JRadioButton("Litro");
         radioMetro = new JRadioButton("Metro");
         radioCaixa = new JRadioButton("Caixa");
         radioPacote = new JRadioButton("Pacote");
-        
+
         // Agrupa os botões
         grupoUnidades.add(radioUnidade);
         grupoUnidades.add(radioKg);
@@ -75,7 +75,7 @@ public class ProdutoView extends JFrame {
         grupoUnidades.add(radioMetro);
         grupoUnidades.add(radioCaixa);
         grupoUnidades.add(radioPacote);
-        
+
         // Adiciona ao painel
         painelUnidades.add(radioUnidade);
         painelUnidades.add(radioKg);
@@ -180,8 +180,8 @@ public class ProdutoView extends JFrame {
 
         // ========== TABELA ==========
         modeloTabela = new DefaultTableModel(
-                new Object[] { "ID", "Nome", "Preço", "Unidade", "Quantidade", "Quantidade Mínima", "Quantidade Máxima",
-                        "Categoria" },
+                new Object[]{"ID", "Nome", "Preço", "Unidade", "Quantidade", "Quantidade Mínima", "Quantidade Máxima",
+                    "Categoria"},
                 0);
 
         tabela = new JTable(modeloTabela);
@@ -230,15 +230,15 @@ public class ProdutoView extends JFrame {
             int quantidade = Integer.parseInt(input);
             int id = (int) tabela.getValueAt(selectedRow, 0);
             int quantidadeAtual = (int) tabela.getValueAt(selectedRow, 4);
-            int quantidadeMinima = (int) tabela.getValueAt(selectedRow, 5); 
-            int quantidadeMaxima = (int) tabela.getValueAt(selectedRow, 6); 
+            int quantidadeMinima = (int) tabela.getValueAt(selectedRow, 5);
+            int quantidadeMaxima = (int) tabela.getValueAt(selectedRow, 6);
 
             // VALIDAÇÃO SIMPLES PARA SAÍDAS - IMPEDIR QUANTIDADE NEGATIVA
             if (operacao == -1 && quantidade > quantidadeAtual) {
-                JOptionPane.showMessageDialog(this, 
-                    "Estoque insuficiente!\nQuantidade disponível: " + quantidadeAtual, 
-                    "Erro", 
-                    JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this,
+                        "Estoque insuficiente!\nQuantidade disponível: " + quantidadeAtual,
+                        "Erro",
+                        JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
@@ -272,15 +272,15 @@ public class ProdutoView extends JFrame {
         modeloTabela.setRowCount(0);
         List<Produto> produtos = produtoDAO.listarTodos();
         for (Produto p : produtos) {
-            modeloTabela.addRow(new Object[] {
-                    p.getId(),
-                    p.getNome(),
-                    p.getPrecoUnitario(),
-                    p.getUnidade(),
-                    p.getQuantidade(),
-                    p.getQuantidadeMinima(),
-                    p.getQuantidadeMaxima(),
-                    p.getCategoria()
+            modeloTabela.addRow(new Object[]{
+                p.getId(),
+                p.getNome(),
+                p.getPrecoUnitario(),
+                p.getUnidade(),
+                p.getQuantidade(),
+                p.getQuantidadeMinima(),
+                p.getQuantidadeMaxima(),
+                p.getCategoria()
             });
         }
     }
@@ -294,12 +294,24 @@ public class ProdutoView extends JFrame {
     }
 
     private String getUnidadeSelecionada() {
-        if (radioUnidade.isSelected()) return "Unidade";
-        if (radioKg.isSelected()) return "Kg";
-        if (radioLitro.isSelected()) return "Litro";
-        if (radioMetro.isSelected()) return "Metro";
-        if (radioCaixa.isSelected()) return "Caixa";
-        if (radioPacote.isSelected()) return "Pacote";
+        if (radioUnidade.isSelected()) {
+            return "Unidade";
+        }
+        if (radioKg.isSelected()) {
+            return "Kg";
+        }
+        if (radioLitro.isSelected()) {
+            return "Litro";
+        }
+        if (radioMetro.isSelected()) {
+            return "Metro";
+        }
+        if (radioCaixa.isSelected()) {
+            return "Caixa";
+        }
+        if (radioPacote.isSelected()) {
+            return "Pacote";
+        }
         return "Unidade"; // Padrão
     }
 
@@ -315,6 +327,10 @@ public class ProdutoView extends JFrame {
 
             if (nome.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Preencha todos os campos!", "Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if (comboCategoria.getSelectedItem() == null) {
+                JOptionPane.showMessageDialog(this, "Cadastre categorias primeiro!", "Erro", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
@@ -394,14 +410,21 @@ public class ProdutoView extends JFrame {
 
         // Atualiza a unidade via radio buttons
         String unidade = tabela.getValueAt(selectedRow, 3).toString(); // Unidade (coluna 3)
-        if (unidade.equals("Unidade")) radioUnidade.setSelected(true);
-        else if (unidade.equals("Kg")) radioKg.setSelected(true);
-        else if (unidade.equals("Litro")) radioLitro.setSelected(true);
-        else if (unidade.equals("Metro")) radioMetro.setSelected(true);
-        else if (unidade.equals("Caixa")) radioCaixa.setSelected(true);
-        else if (unidade.equals("Pacote")) radioPacote.setSelected(true);
-        else radioUnidade.setSelected(true); // Padrão
-
+        if (unidade.equals("Unidade")) {
+            radioUnidade.setSelected(true);
+        } else if (unidade.equals("Kg")) {
+            radioKg.setSelected(true);
+        } else if (unidade.equals("Litro")) {
+            radioLitro.setSelected(true);
+        } else if (unidade.equals("Metro")) {
+            radioMetro.setSelected(true);
+        } else if (unidade.equals("Caixa")) {
+            radioCaixa.setSelected(true);
+        } else if (unidade.equals("Pacote")) {
+            radioPacote.setSelected(true);
+        } else {
+            radioUnidade.setSelected(true); // Padrão
+        }
         // Atualiza a categoria
         String nomeCategoria = tabela.getValueAt(selectedRow, 7).toString();
         for (int i = 0; i < comboCategoria.getItemCount(); i++) {
@@ -419,7 +442,7 @@ public class ProdutoView extends JFrame {
         txtQuantidade.setText("");
         txtMin.setText("");
         txtMax.setText("");
-        radioUnidade.setSelected(true); 
+        radioUnidade.setSelected(true);
         comboCategoria.setSelectedIndex(0);
         tabela.clearSelection();
     }

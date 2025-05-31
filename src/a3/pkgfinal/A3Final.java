@@ -1,11 +1,6 @@
 package a3.pkgfinal;
 
-import DAO.CategoriaDAO;
-import DAO.ProdutoDAO;
-import Model.Categoria;
-import Model.Produto;
 import VIEW.MenuPrincipal;
-import java.util.List;
 
 public class A3Final {
 
