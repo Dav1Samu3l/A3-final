@@ -16,6 +16,7 @@ public class Relatorio {
     public Relatorio() {
     }
 
+    // Para Preços
     public Relatorio(String nome, double precoUnitario, String unidade, String categoria) {
         this.nome = nome;
         this.precoUnitario = precoUnitario;

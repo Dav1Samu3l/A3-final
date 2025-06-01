@@ -10,12 +10,25 @@ public class Produto {
     private int quantidadeMinima;
     private int quantidadeMaxima;
     private Categoria categoria;
-    
+
     public Produto() {
     }
 
+    // para produtos com  banco de dados vasio   
     public Produto(String nome, double precoUnitario, String unidade, int quantidade,
             int quantidadeMinima, int quantidadeMaxima, Categoria categoria) {
+        this.nome = nome;
+        this.precoUnitario = precoUnitario;
+        this.unidade = unidade;
+        this.quantidade = quantidade;
+        this.quantidadeMinima = quantidadeMinima;
+        this.quantidadeMaxima = quantidadeMaxima;
+        this.categoria = categoria;
+    }
+
+    public Produto(int id, String nome, double precoUnitario, String unidade, int quantidade,
+            int quantidadeMinima, int quantidadeMaxima, Categoria categoria) {
+        this.id = id;
         this.nome = nome;
         this.precoUnitario = precoUnitario;
         this.unidade = unidade;

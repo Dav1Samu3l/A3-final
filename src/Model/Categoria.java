@@ -1,7 +1,5 @@
 package Model;
 
-
-
 public class Categoria {
 
     // Atributos
@@ -12,7 +10,8 @@ public class Categoria {
 
     public Categoria() {
     }
-  // para iniciar categorias com o banco vazio
+
+    // para iniciar categorias com o banco vazio
     public Categoria(String nome, String tamanho, String embalagem) {
         this.nome = nome;
         this.tamanho = tamanho;
@@ -59,17 +58,16 @@ public class Categoria {
         this.embalagem = embalagem;
     }
 
-    /*  @Override
-    public String toString() {
-        return "Categoria{" + "id=" + id + ", nome=" + nome + 
-               ", tamanho=" + tamanho + ", embalagem=" + embalagem + '}';
-    }
+    /*
+     * @Override
+     * public String toString() {
+     * return "Categoria{" + "id=" + id + ", nome=" + nome +
+     * ", tamanho=" + tamanho + ", embalagem=" + embalagem + '}';
+     * }
      */
     @Override
     public String toString() {
-        return this.nome; 
+        return this.nome;
     }
 
-    // Métodos DAO
-   
 }

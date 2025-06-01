@@ -7,7 +7,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
-public class RelatorioView extends JFrame { 
+public class RelatorioView extends JFrame {
 
     private JTabbedPane abas;
     private ProdutoDAO produtoDAO;
@@ -18,12 +18,11 @@ public class RelatorioView extends JFrame {
         setLocationRelativeTo(null);
     }
 
-     public RelatorioView() {
-    produtoDAO = new ProdutoDAO();
-    initComponents();
-    setLocationRelativeTo(null);
-}
-   
+    public RelatorioView() {
+        produtoDAO = new ProdutoDAO();
+        initComponents();
+        setLocationRelativeTo(null);
+    }
 
     private void initComponents() {
         setTitle("Relatórios");
@@ -51,28 +50,29 @@ public class RelatorioView extends JFrame {
     }
 
     private JScrollPane criarPainelListaPrecos() {
-    DefaultTableModel modelo = new DefaultTableModel(
-        new Object[]{"Produto", "Preço Unitário", "Unidade", "Categoria"}, 0) {
+        DefaultTableModel modelo = new DefaultTableModel(
+                new Object[]{"Produto", "Preço Unitário", "Unidade", "Categoria"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
 
-    // adicionar dados ao modelo
-    for (Relatorio r : produtoDAO.gerarListaPrecos()) {
-        modelo.addRow(new Object[]{
-            r.getNome(),
-            String.format("R$ %.2f", r.getPrecoUnitario()), 
-            r.getUnidade(),
-            r.getCategoria()
-        }); 
-    } 
+        // adicionar dados ao modelo
+        for (Relatorio r : produtoDAO.gerarListaPrecos()) {
+            modelo.addRow(new Object[]{
+                r.getNome(),
+                String.format("R$ %.2f", r.getPrecoUnitario()),
+                r.getUnidade(),
+                r.getCategoria()
+            });
+        }
 
-    JTable tabela = new JTable(modelo);
-    tabela.getColumnModel().getColumn(1).setPreferredWidth(100);
-    return new JScrollPane(tabela);
-} // 
+        JTable tabela = new JTable(modelo);
+        tabela.getColumnModel().getColumn(1).setPreferredWidth(100);
+        return new JScrollPane(tabela);
+    } // 
+
     private JScrollPane criarPainelBalanco() {
         DefaultTableModel modelo = new DefaultTableModel(
                 new Object[]{"Produto", "Quantidade", "Preço Unitário", "Valor Total"}, 0) {
