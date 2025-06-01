@@ -307,19 +307,20 @@ public class ProdutoDAO {
         return relatorio;
     }
 
-    public boolean reajustarPrecos(double percentual) {
-        String sql = "UPDATE produto SET preco_unitario = preco_unitario * (1 + ? / 100)";
-
-        try (Connection conexao = ConnectionFactory.getConnection(); 
-             PreparedStatement stmt = conexao.prepareStatement(sql)) {
-
-            stmt.setDouble(1, percentual);
-            return stmt.executeUpdate() > 0;
-        } catch (SQLException e) {
-            System.err.println("Erro ao reajustar preços: " + e.getMessage());
-        }
-        return false;
+public boolean reajustarPrecos(double percentual) {
+    String sql = "UPDATE produto SET preco_unitario = preco_unitario * (1 + ? / 100)";
+    
+    try (Connection conexao = ConnectionFactory.getConnection(); 
+         PreparedStatement stmt = conexao.prepareStatement(sql)) {
+        
+        stmt.setDouble(1, percentual);
+        return stmt.executeUpdate() > 0;
+        
+    } catch (SQLException e) {
+        System.err.println("Erro ao reajustar preços: " + e.getMessage());
     }
+    return false;
+}
     
     public ArrayList<Produto> getMinhaLista() {
         return new ArrayList<>(listarTodos());

@@ -166,6 +166,7 @@ public class ProdutoView extends JFrame {
 
         btnEntrada.addActionListener(e -> atualizarQuantidade(1));
         btnSaida.addActionListener(e -> atualizarQuantidade(-1));
+        JButton btnReajustar = new JButton("Reajustar Preços");
 
         buttonPanel.add(btnEntrada);
         buttonPanel.add(btnSaida);
@@ -173,6 +174,7 @@ public class ProdutoView extends JFrame {
         buttonPanel.add(btnEditar);
         buttonPanel.add(btnRemover);
         buttonPanel.add(btnLimpar);
+        buttonPanel.add(btnReajustar);
 
         // Adiciona formulário e botões ao topPanel
         topPanel.add(formPanel, BorderLayout.CENTER);
@@ -197,6 +199,7 @@ public class ProdutoView extends JFrame {
         mainPanel.add(scrollPane, BorderLayout.CENTER);
 
         // Listeners
+        btnReajustar.addActionListener(this::reajustarPrecos);
         btnAdicionar.addActionListener(this::adicionarProduto);
         btnEditar.addActionListener(this::editarProduto);
         btnRemover.addActionListener(this::removerProduto);
@@ -439,6 +442,54 @@ public class ProdutoView extends JFrame {
             }
         }
     }
+    
+    private void reajustarPrecos(ActionEvent e) {
+    try {
+        String input = JOptionPane.showInputDialog(
+            this,
+            "Percentual de reajuste (%):",
+            "Reajuste de Preços",
+            JOptionPane.QUESTION_MESSAGE
+        );
+        
+        if (input == null || input.trim().isEmpty()) return;
+        
+        double percentual = Double.parseDouble(input);
+        
+        int confirm = JOptionPane.showConfirmDialog(
+            this,
+            "Deseja aplicar " + percentual + "% de reajuste em TODOS os produtos?",
+            "Confirmação",
+            JOptionPane.YES_NO_OPTION
+        );
+        
+        if (confirm == JOptionPane.YES_OPTION) {
+            if (produtoDAO.reajustarPrecos(percentual)) {
+                JOptionPane.showMessageDialog(
+                    this,
+                    "Reajuste aplicado com sucesso!",
+                    "Sucesso",
+                    JOptionPane.INFORMATION_MESSAGE
+                );
+                carregarDados(); // Atualiza a tabela
+            } else {
+                JOptionPane.showMessageDialog(
+                    this,
+                    "Erro ao aplicar reajuste",
+                    "Erro",
+                    JOptionPane.ERROR_MESSAGE
+                );
+            }
+        }
+    } catch (NumberFormatException ex) {
+        JOptionPane.showMessageDialog(
+            this,
+            "Valor inválido! Use números decimais (ex: 10.5)",
+            "Erro",
+            JOptionPane.ERROR_MESSAGE
+        );
+    }
+}
 
     private void limparCampos() {
         txtNome.setText("");
