@@ -16,8 +16,8 @@ public class ProdutoView extends JFrame {
     private DefaultTableModel modeloTabela;
     private JTextField txtNome, txtPreco, txtQuantidade, txtMin, txtMax;
     private JComboBox<Categoria> comboCategoria;
-    private ProdutoDAO produtoDAO;
-    private CategoriaDAO categoriaDAO;
+    private final ProdutoDAO produtoDAO;
+    private final CategoriaDAO categoriaDAO;
     private JRadioButton radioUnidade, radioKg, radioLitro, radioMetro, radioCaixa, radioPacote;
     private ButtonGroup grupoUnidades;
 

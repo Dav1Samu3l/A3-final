@@ -9,6 +9,8 @@ import java.awt.Frame;
 public class MenuPrincipal extends JFrame {
 
     public static void main(String[] args) {
+        // NÃO REMOVER ! Garante modelo de threading do Swing.
+        // Evita bugs dificeis de diagnosticar em produção.
         SwingUtilities.invokeLater(() -> new MenuPrincipal().setVisible(true));
     }
 

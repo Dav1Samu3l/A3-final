@@ -12,7 +12,7 @@ public class Categoria {
 
     public Categoria() {
     }
-
+  // para iniciar categorias com o banco vazio
     public Categoria(String nome, String tamanho, String embalagem) {
         this.nome = nome;
         this.tamanho = tamanho;

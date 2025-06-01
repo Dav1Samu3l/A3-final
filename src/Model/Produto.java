@@ -1,9 +1,5 @@
 package Model;
 
-import DAO.ProdutoDAO;
-import java.sql.SQLException;
-import java.util.ArrayList;
-
 public class Produto {
 
     private int id;
@@ -14,10 +10,8 @@ public class Produto {
     private int quantidadeMinima;
     private int quantidadeMaxima;
     private Categoria categoria;
-    private final ProdutoDAO dao;
-
+    
     public Produto() {
-        this.dao = new ProdutoDAO();
     }
 
     public Produto(String nome, double precoUnitario, String unidade, int quantidade,
@@ -29,10 +23,8 @@ public class Produto {
         this.quantidadeMinima = quantidadeMinima;
         this.quantidadeMaxima = quantidadeMaxima;
         this.categoria = categoria;
-        this.dao = new ProdutoDAO();
     }
 
-    // Getters e Setters
     public int getId() {
         return id;
     }
@@ -95,18 +87,5 @@ public class Produto {
 
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
-        
     }
-/*
-    @Override
-    public String toString() {
-        return "Produto{" + "id=" + id + ", nome=" + nome + ", precoUnitario=" + precoUnitario
-                + ", unidade=" + unidade + ", quantidade=" + quantidade
-                + ", quantidadeMinima=" + quantidadeMinima
-                + ", quantidadeMaxima=" + quantidadeMaxima
-                + ", categoria=" + categoria + '}';
-    }
-*/
-    // Métodos DAO
-   
 }
