@@ -30,127 +30,137 @@ public class CategoriaView extends JFrame {
         initComponents();
         setMinimumSize(new Dimension(500, 300));
         carregarDados();
-    }
-
-    private void initComponents() {
-        setTitle("Gerenciamento de Categorias");
-        setSize(600, 450);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
-
-        JPanel panel = new JPanel(new BorderLayout(10, 10));
-        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
-        // ========== FORMULÁRIO COM GRIDBAGLAYOUT ==========
-        JPanel formPanel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
-        gbc.anchor = GridBagConstraints.WEST;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        
-        // Componentes
-        txtNome = new JTextField(20);
-        
-        // Tamanho (Pequeno, Médio, Grande)
-        grupoTamanho = new ButtonGroup();
-        JPanel tamanhoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        rbPequeno = new JRadioButton("Pequeno");
-        rbMedio = new JRadioButton("Médio");
-        rbGrande = new JRadioButton("Grande");
-
-        radioTamanhos = new JRadioButton[]{rbPequeno, rbMedio, rbGrande};
-        grupoTamanho.add(rbPequeno);
-        grupoTamanho.add(rbMedio);
-        grupoTamanho.add(rbGrande);
-        tamanhoPanel.add(rbPequeno);
-        tamanhoPanel.add(rbMedio);
-        tamanhoPanel.add(rbGrande);
-
-        // Embalagem (Lata, Vidro, Plástico)
-        grupoEmbalagem = new ButtonGroup();
-        JPanel embalagemPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        rbLata = new JRadioButton("Lata");
-        rbVidro = new JRadioButton("Vidro");
-        rbPlastico = new JRadioButton("Plástico");
-
-        radioEmbalagens = new JRadioButton[]{rbLata, rbVidro, rbPlastico};
-        grupoEmbalagem.add(rbLata);
-        grupoEmbalagem.add(rbVidro);
-        grupoEmbalagem.add(rbPlastico);
-        embalagemPanel.add(rbLata);
-        embalagemPanel.add(rbVidro);
-        embalagemPanel.add(rbPlastico);
-
-        // ========== ADICIONANDO COMPONENTES AO FORMULÁRIO ==========
-        // Linha 1: Nome
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.weightx = 0.1;
-        formPanel.add(new JLabel("Nome:"), gbc);
-
-        gbc.gridx = 1;
-        gbc.weightx = 0.9;
-        formPanel.add(txtNome, gbc);
-
-        // Linha 2: Tamanho
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.weightx = 0.1;
-        formPanel.add(new JLabel("Tamanho:"), gbc);
-
-        gbc.gridx = 1;
-        gbc.weightx = 0.9;
-        formPanel.add(tamanhoPanel, gbc);
-
-        // Linha 3: Embalagem
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        gbc.weightx = 0.1;
-        formPanel.add(new JLabel("Embalagem:"), gbc);
-
-        gbc.gridx = 1;
-        gbc.weightx = 0.9;
-        formPanel.add(embalagemPanel, gbc);
-
-        // ========== BOTÕES ==========
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10)); // Alinhado à esquerda
-        JButton btnAdicionar = new JButton("Adicionar");
-        JButton btnEditar = new JButton("Editar");
-        JButton btnRemover = new JButton("Remover");
-        JButton btnLimpar = new JButton("Limpar");
-
-        buttonPanel.add(btnAdicionar);
-        buttonPanel.add(btnEditar);
-        buttonPanel.add(btnRemover);
-        buttonPanel.add(btnLimpar);
-
-        // ========== TABELA ==========
-        modeloTabela = new DefaultTableModel(new Object[]{"ID", "Nome", "Tamanho", "Embalagem"}, 0);
-        tabela = new JTable(modeloTabela);
-        JScrollPane scrollPane = new JScrollPane(tabela);
-        scrollPane.setPreferredSize(new Dimension(0, 150));
-
-        JPanel topPanel = new JPanel(new BorderLayout());
-        topPanel.add(formPanel, BorderLayout.NORTH);
-        topPanel.add(buttonPanel, BorderLayout.CENTER);
-
-        panel.add(topPanel, BorderLayout.NORTH);
-        panel.add(scrollPane, BorderLayout.CENTER);
-
-        // ========== LISTENERS ==========
-        btnAdicionar.addActionListener(this::adicionarCategoria);
-        btnEditar.addActionListener(this::editarCategoria);
-        btnRemover.addActionListener(this::removerCategoria);
-        btnLimpar.addActionListener(e -> limparCampos());
-
-        tabela.getSelectionModel().addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting() && tabela.getSelectedRow() != -1) {
-                preencherCampos();
-            }
-        });
-
-        add(panel);
     }
+
+  private void initComponents() {
+    setTitle("Gerenciamento de Categorias");
+    setSize(600, 450);
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    setLocationRelativeTo(null);
+
+    JPanel panel = new JPanel(new BorderLayout(10, 10));
+    panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+    // ========== FORMULÁRIO COM GRIDBAGLAYOUT ==========
+    JPanel formPanel = new JPanel(new GridBagLayout());
+    GridBagConstraints gbc = new GridBagConstraints();
+    gbc.insets = new Insets(5, 5, 5, 5);
+    gbc.anchor = GridBagConstraints.WEST;
+    gbc.fill = GridBagConstraints.HORIZONTAL;
+    
+    // Componentes
+    txtNome = new JTextField(20);
+    
+    // Tamanho (Pequeno, Médio, Grande)
+    grupoTamanho = new ButtonGroup();
+    JPanel tamanhoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    rbPequeno = new JRadioButton("Pequeno");
+    rbMedio = new JRadioButton("Médio");
+    rbGrande = new JRadioButton("Grande");
+
+    radioTamanhos = new JRadioButton[]{rbPequeno, rbMedio, rbGrande};
+    grupoTamanho.add(rbPequeno);
+    grupoTamanho.add(rbMedio);
+    grupoTamanho.add(rbGrande);
+    tamanhoPanel.add(rbPequeno);
+    tamanhoPanel.add(rbMedio);
+    tamanhoPanel.add(rbGrande);
+
+    // Embalagem (Lata, Vidro, Plástico)
+    grupoEmbalagem = new ButtonGroup();
+    JPanel embalagemPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    rbLata = new JRadioButton("Lata");
+    rbVidro = new JRadioButton("Vidro");
+    rbPlastico = new JRadioButton("Plástico");
+
+    radioEmbalagens = new JRadioButton[]{rbLata, rbVidro, rbPlastico};
+    grupoEmbalagem.add(rbLata);
+    grupoEmbalagem.add(rbVidro);
+    grupoEmbalagem.add(rbPlastico);
+    embalagemPanel.add(rbLata);
+    embalagemPanel.add(rbVidro);
+    embalagemPanel.add(rbPlastico);
+
+    // ========== ADICIONANDO COMPONENTES AO FORMULÁRIO ==========
+    // Linha 1: Nome
+    gbc.gridx = 0;
+    gbc.gridy = 0;
+    gbc.weightx = 0.1;
+    formPanel.add(new JLabel("Nome:"), gbc);
+
+    gbc.gridx = 1;
+    gbc.weightx = 0.9;
+    formPanel.add(txtNome, gbc);
+
+    // Linha 2: Tamanho
+    gbc.gridx = 0;
+    gbc.gridy = 1;
+    gbc.weightx = 0.1;
+    formPanel.add(new JLabel("Tamanho:"), gbc);
+
+    gbc.gridx = 1;
+    gbc.weightx = 0.9;
+    formPanel.add(tamanhoPanel, gbc);
+
+    // Linha 3: Embalagem
+    gbc.gridx = 0;
+    gbc.gridy = 2;
+    gbc.weightx = 0.1;
+    formPanel.add(new JLabel("Embalagem:"), gbc);
+
+    gbc.gridx = 1;
+    gbc.weightx = 0.9;
+    formPanel.add(embalagemPanel, gbc);
+
+    // ========== BOTÕES ==========
+    JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+    JButton btnAdicionar = new JButton("Adicionar");
+    JButton btnEditar = new JButton("Editar");
+    JButton btnRemover = new JButton("Remover");
+    JButton btnLimpar = new JButton("Limpar");
+
+    buttonPanel.add(btnAdicionar);
+    buttonPanel.add(btnEditar);
+    buttonPanel.add(btnRemover);
+    buttonPanel.add(btnLimpar);
+
+    // ========== TABELA ==========
+    // Modelo de tabela não editável
+    modeloTabela = new DefaultTableModel(
+        new Object[]{"ID", "Nome", "Tamanho", "Embalagem"}, 
+        0) {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false; // Todas as células NÃO editáveis
+        }
+    };
+
+    tabela = new JTable(modeloTabela);
+    JScrollPane scrollPane = new JScrollPane(tabela);
+    scrollPane.setPreferredSize(new Dimension(0, 150));
+
+    JPanel topPanel = new JPanel(new BorderLayout());
+    topPanel.add(formPanel, BorderLayout.NORTH);
+    topPanel.add(buttonPanel, BorderLayout.CENTER);
+
+    panel.add(topPanel, BorderLayout.NORTH);
+    panel.add(scrollPane, BorderLayout.CENTER);
+
+    // ========== LISTENERS ==========
+    btnAdicionar.addActionListener(this::adicionarCategoria);
+    btnEditar.addActionListener(this::editarCategoria);
+    btnRemover.addActionListener(this::removerCategoria);
+    btnLimpar.addActionListener(e -> limparCampos());
+
+    tabela.getSelectionModel().addListSelectionListener(e -> {
+        if (!e.getValueIsAdjusting() && tabela.getSelectedRow() != -1) {
+            preencherCampos();
+        }
+    });
+
+    add(panel);
+}
 
     private void carregarDados() {
         modeloTabela.setRowCount(0);

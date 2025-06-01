@@ -180,9 +180,13 @@ public class ProdutoView extends JFrame {
 
         // ========== TABELA ==========
         modeloTabela = new DefaultTableModel(
-                new Object[]{"ID", "Nome", "Preço", "Unidade", "Quantidade", "Quantidade Mínima", "Quantidade Máxima",
-                    "Categoria"},
-                0);
+                new Object[]{"ID", "Nome", "Preço", "Unidade", "Quantidade", "Quantidade Mínima", "Quantidade Máxima", "Categoria"},
+                0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Tabela somente leitura
+            }
+        };
 
         tabela = new JTable(modeloTabela);
         JScrollPane scrollPane = new JScrollPane(tabela);
