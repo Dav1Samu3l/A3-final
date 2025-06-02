@@ -2,7 +2,7 @@
 
 
 
-        CREATE DATABASE  db_estoque;
+        CREATE DATABASE IF NOT EXISTS db_estoque;
 
         USE db_estoque;
 
@@ -17,7 +17,7 @@
             categoria_id INT  
         )ENGINE=InnoDB;
 
-        CREATE TABLE  categoria (
+        CREATE TABLE  IF NOT EXISTS categoria (
             id INT AUTO_INCREMENT PRIMARY KEY,
             nome VARCHAR(100) NOT NULL,
             tamanho ENUM('Pequeno', 'Médio', 'Grande') NOT NULL DEFAULT 'Médio',
