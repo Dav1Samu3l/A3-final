@@ -11,21 +11,20 @@ public class ProdutoDAO {
 
     public ProdutoDAO() {
     }
+    // Retorna o maior ID de produto
 
     public int maiorID() throws SQLException {
         String sql = "SELECT MAX(id) FROM produto";
-        try (Connection conexao = ConnectionFactory.getConnection();
-             Statement stmt = conexao.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-             return rs.next() ? rs.getInt(1) : 0;
+        try (Connection conexao = ConnectionFactory.getConnection(); Statement stmt = conexao.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+            return rs.next() ? rs.getInt(1) : 0;
         }
     }
 
+    // Insere um novo produto no banco
     public boolean inserir(Produto produto) {
         String sql = "INSERT INTO produto (nome, preco_unitario, unidade, quantidade, quantidade_minima, quantidade_maxima, categoria_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        try (Connection conexao = ConnectionFactory.getConnection(); 
-             PreparedStatement stmt = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection conexao = ConnectionFactory.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             stmt.setString(1, produto.getNome());
             stmt.setDouble(2, produto.getPrecoUnitario());
@@ -49,11 +48,11 @@ public class ProdutoDAO {
         return false;
     }
 
+    // Atualiza os dados de um produto existente
     public boolean atualizar(Produto produto) {
         String sql = "UPDATE produto SET nome=?, preco_unitario=?, unidade=?, quantidade=?, quantidade_minima=?, quantidade_maxima=?, categoria_id=? WHERE id=?";
 
-        try (Connection conexao = ConnectionFactory.getConnection(); 
-             PreparedStatement stmt = conexao.prepareStatement(sql)) {
+        try (Connection conexao = ConnectionFactory.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
             stmt.setString(1, produto.getNome());
             stmt.setDouble(2, produto.getPrecoUnitario());
@@ -71,11 +70,11 @@ public class ProdutoDAO {
         return false;
     }
 
+    // Remove um produto pelo ID
     public boolean deletar(int id) {
         String sql = "DELETE FROM produto WHERE id=?";
 
-        try (Connection conexao = ConnectionFactory.getConnection(); 
-             PreparedStatement stmt = conexao.prepareStatement(sql)) {
+        try (Connection conexao = ConnectionFactory.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
             return stmt.executeUpdate() > 0;
@@ -85,11 +84,11 @@ public class ProdutoDAO {
         return false;
     }
 
+    // Busca um produto pelo ID
     public Produto buscarPorId(int id) {
         String sql = "SELECT p.*, c.nome as categoria_nome, c.tamanho, c.embalagem FROM produto p LEFT JOIN categoria c ON p.categoria_id = c.id WHERE p.id=?";
 
-        try (Connection conexao = ConnectionFactory.getConnection(); 
-             PreparedStatement stmt = conexao.prepareStatement(sql)) {
+        try (Connection conexao = ConnectionFactory.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
@@ -120,13 +119,12 @@ public class ProdutoDAO {
         return null;
     }
 
+    // Lista todos os produtos cadastrados
     public List<Produto> listarTodos() {
         List<Produto> produtos = new ArrayList<>();
         String sql = "SELECT p.*, c.nome as categoria_nome, c.tamanho, c.embalagem FROM produto p LEFT JOIN categoria c ON p.categoria_id = c.id ORDER BY p.nome";
 
-        try (Connection conexao = ConnectionFactory.getConnection(); 
-             Statement stmt = conexao.createStatement(); 
-             ResultSet rs = stmt.executeQuery(sql)) {
+        try (Connection conexao = ConnectionFactory.getConnection(); Statement stmt = conexao.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
                 Produto produto = new Produto();
@@ -154,12 +152,12 @@ public class ProdutoDAO {
         return produtos;
     }
 
+    // Atualiza a quantidade em estoque de um produto
     public boolean atualizarQuantidade(int id, int quantidadeVariacao) {
         if (quantidadeVariacao < 0) {
             String sqlVerificaEstoque = "SELECT quantidade FROM produto WHERE id = ?";
-            try (Connection conexao = ConnectionFactory.getConnection();
-                 PreparedStatement stmtVerifica = conexao.prepareStatement(sqlVerificaEstoque)) {
-                
+            try (Connection conexao = ConnectionFactory.getConnection(); PreparedStatement stmtVerifica = conexao.prepareStatement(sqlVerificaEstoque)) {
+
                 stmtVerifica.setInt(1, id);
                 try (ResultSet rs = stmtVerifica.executeQuery()) {
                     if (rs.next()) {
@@ -176,12 +174,11 @@ public class ProdutoDAO {
         }
 
         String sqlAtualiza = "UPDATE produto SET quantidade = quantidade + ? WHERE id = ?";
-        try (Connection conexao = ConnectionFactory.getConnection();
-             PreparedStatement stmtAtualiza = conexao.prepareStatement(sqlAtualiza)) {
-            
+        try (Connection conexao = ConnectionFactory.getConnection(); PreparedStatement stmtAtualiza = conexao.prepareStatement(sqlAtualiza)) {
+
             stmtAtualiza.setInt(1, quantidadeVariacao);
             stmtAtualiza.setInt(2, id);
-            
+
             return stmtAtualiza.executeUpdate() > 0;
         } catch (SQLException e) {
             System.err.println("Erro ao atualizar quantidade: " + e.getMessage());
@@ -189,13 +186,12 @@ public class ProdutoDAO {
         return false;
     }
 
+    // Lista produtos com estoque abaixo do mínimo
     public List<Produto> listarAbaixoDoMinimo() {
         List<Produto> produtos = new ArrayList<>();
         String sql = "SELECT p.*, c.nome as categoria_nome FROM produto p LEFT JOIN categoria c ON p.categoria_id = c.id WHERE p.quantidade < p.quantidade_minima ORDER BY p.nome";
 
-        try (Connection conexao = ConnectionFactory.getConnection(); 
-             Statement stmt = conexao.createStatement(); 
-             ResultSet rs = stmt.executeQuery(sql)) {
+        try (Connection conexao = ConnectionFactory.getConnection(); Statement stmt = conexao.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
                 Produto produto = new Produto();
@@ -216,13 +212,12 @@ public class ProdutoDAO {
         return produtos;
     }
 
+    // Lista produtos com estoque acima do máximo
     public List<Produto> listarAcimaDoMaximo() {
         List<Produto> produtos = new ArrayList<>();
         String sql = "SELECT p.*, c.nome as categoria_nome FROM produto p LEFT JOIN categoria c ON p.categoria_id = c.id WHERE p.quantidade > p.quantidade_maxima ORDER BY p.nome";
 
-        try (Connection conexao = ConnectionFactory.getConnection(); 
-             Statement stmt = conexao.createStatement(); 
-             ResultSet rs = stmt.executeQuery(sql)) {
+        try (Connection conexao = ConnectionFactory.getConnection(); Statement stmt = conexao.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
                 Produto produto = new Produto();
@@ -243,13 +238,12 @@ public class ProdutoDAO {
         return produtos;
     }
 
+    // Gera relatório de lista de preços
     public List<Relatorio> gerarListaPrecos() {
         List<Relatorio> relatorio = new ArrayList<>();
         String sql = "SELECT p.nome, p.preco_unitario, p.unidade, c.nome as categoria FROM produto p LEFT JOIN categoria c ON p.categoria_id = c.id ORDER BY p.nome";
 
-        try (Connection conexao = ConnectionFactory.getConnection(); 
-             Statement stmt = conexao.createStatement(); 
-             ResultSet rs = stmt.executeQuery(sql)) {
+        try (Connection conexao = ConnectionFactory.getConnection(); Statement stmt = conexao.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
                 relatorio.add(new Relatorio(
@@ -265,21 +259,25 @@ public class ProdutoDAO {
         return relatorio;
     }
 
+    // Gera relatório de balanço financeiro
     public List<Relatorio> gerarBalanco() {
         List<Relatorio> relatorio = new ArrayList<>();
-        String sql = "SELECT p.nome, p.quantidade, p.preco_unitario, (p.quantidade * p.preco_unitario) as valor_total FROM produto p ORDER BY p.nome";
+        String sql = "SELECT p.nome, p.quantidade, p.preco_unitario, (p.quantidade * p.preco_unitario) as valor_total "
+                + "FROM produto p WHERE p.preco_unitario > 0 ORDER BY p.nome"; // Filtro para preços > 0
 
-        try (Connection conexao = ConnectionFactory.getConnection(); 
-             Statement stmt = conexao.createStatement(); 
-             ResultSet rs = stmt.executeQuery(sql)) {
+        try (Connection conexao = ConnectionFactory.getConnection(); Statement stmt = conexao.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
 
+            System.out.println("Dados do balanço:");
             while (rs.next()) {
-                relatorio.add(new Relatorio(
-                        rs.getString("nome"),
-                        rs.getInt("quantidade"),
-                        rs.getDouble("preco_unitario"),
-                        rs.getDouble("valor_total")
-                ));
+                String nome = rs.getString("nome");
+                int quantidade = rs.getInt("quantidade");
+                double preco = rs.getDouble("preco_unitario");
+                double total = rs.getDouble("valor_total");
+
+                System.out.printf("%s - Qtd: %d - Preço: %.2f - Total: %.2f%n",
+                        nome, quantidade, preco, total);
+
+                relatorio.add(new Relatorio(nome, quantidade, preco, total));
             }
         } catch (SQLException e) {
             System.err.println("Erro ao gerar balanço: " + e.getMessage());
@@ -287,13 +285,12 @@ public class ProdutoDAO {
         return relatorio;
     }
 
+    // Gera relatório de produtos por categoria
     public List<Relatorio> gerarProdutosPorCategoria() {
         List<Relatorio> relatorio = new ArrayList<>();
         String sql = "SELECT c.nome as categoria, COUNT(p.id) as quantidade FROM categoria c LEFT JOIN produto p ON c.id = p.categoria_id GROUP BY c.nome ORDER BY c.nome";
 
-        try (Connection conexao = ConnectionFactory.getConnection(); 
-             Statement stmt = conexao.createStatement(); 
-             ResultSet rs = stmt.executeQuery(sql)) {
+        try (Connection conexao = ConnectionFactory.getConnection(); Statement stmt = conexao.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
                 relatorio.add(new Relatorio(
@@ -307,21 +304,22 @@ public class ProdutoDAO {
         return relatorio;
     }
 
-public boolean reajustarPrecos(double percentual) {
-    String sql = "UPDATE produto SET preco_unitario = preco_unitario * (1 + ? / 100)";
-    
-    try (Connection conexao = ConnectionFactory.getConnection(); 
-         PreparedStatement stmt = conexao.prepareStatement(sql)) {
-        
-        stmt.setDouble(1, percentual);
-        return stmt.executeUpdate() > 0;
-        
-    } catch (SQLException e) {
-        System.err.println("Erro ao reajustar preços: " + e.getMessage());
+    // Aplica reajuste percentual em todos os preços
+    public boolean reajustarPrecos(double percentual) {
+        String sql = "UPDATE produto SET preco_unitario = preco_unitario * (1 + ? / 100)";
+
+        try (Connection conexao = ConnectionFactory.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql)) {
+
+            stmt.setDouble(1, percentual);
+            return stmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Erro ao reajustar preços: " + e.getMessage());
+        }
+        return false;
     }
-    return false;
-}
-    
+
+    // Retorna lista de todos os produtos
     public ArrayList<Produto> getMinhaLista() {
         return new ArrayList<>(listarTodos());
     }
