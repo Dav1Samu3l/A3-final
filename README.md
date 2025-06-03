@@ -54,6 +54,13 @@ src/
 - O código segue o padrão MVC para melhor organização.
 - Relatórios são exibidos em abas na tela de relatórios.
 
+
+
+## Documentação
+
+Para detalhes técnicos, diagramas e fluxos do sistema, consulte a [documentação completa do projeto](A3-final-escrito%20(8).pdf).
+
+
 ## Licença
 
 Este projeto é acadêmico e livre para uso e modificação.
