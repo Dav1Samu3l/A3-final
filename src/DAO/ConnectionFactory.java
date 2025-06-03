@@ -3,6 +3,9 @@ package DAO;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.SQLTimeoutException;
+import java.sql.SQLNonTransientConnectionException;
+import java.sql.SQLTransientConnectionException;
 
 public class ConnectionFactory {
     // Configurações do banco de dados
@@ -16,8 +19,16 @@ public class ConnectionFactory {
         try {
             Class.forName(DRIVER);
             return DriverManager.getConnection(URL, USER, PASSWORD);
-        } catch (ClassNotFoundException | SQLException e) {
-            throw new RuntimeException("Erro ao conectar com o banco de dados", e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("Driver do MySQL não encontrado!", e);
+        } catch (SQLTimeoutException e) {
+            throw new RuntimeException("Timeout ao conectar ao banco de dados", e);
+        } catch (SQLNonTransientConnectionException e) {
+            throw new RuntimeException("Erro permanente na conexão (ex: credenciais inválidas)", e);
+        } catch (SQLTransientConnectionException e) {
+            throw new RuntimeException("Erro temporário na conexão (ex: servidor inalcançável)", e);
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro geral de SQL: " + e.getMessage(), e);
         }
     }
 
@@ -25,8 +36,29 @@ public class ConnectionFactory {
     public static void testarConexao() {
         try (Connection conn = getConnection()) {
             System.out.println("Conexão com o banco de dados estabelecida com sucesso!");
-        } catch (SQLException e) {
-            System.err.println("Erro ao testar conexão: " + e.getMessage());
+        } catch (RuntimeException e) {
+            Throwable causa = e.getCause();
+            if (causa instanceof SQLException) {
+                SQLException sqlEx = (SQLException) causa;
+                // Verifica códigos de erro específicos do MySQL
+                switch (sqlEx.getErrorCode()) {
+                    case 1045: // Access Denied
+                        System.err.println("ERRO: Credenciais inválidas (usuário/senha)");
+                        break;
+                    case 1049: // Unknown Database
+                        System.err.println("ERRO: Banco de dados não encontrado");
+                        break;
+                    case 0: // Timeout/Comunicação
+                        System.err.println("ERRO: Servidor MySQL inalcançável");
+                        break;
+                    default:
+                        System.err.println("ERRO MySQL [" + sqlEx.getErrorCode() + "]: " + sqlEx.getMessage());
+                }
+            } else {
+                System.err.println("ERRO: " + e.getMessage());
+            }
+        } catch (Exception e) {
+            System.err.println("Erro inesperado: " + e.getMessage());
         }
     }
 }
