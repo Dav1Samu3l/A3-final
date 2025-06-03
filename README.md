@@ -58,7 +58,7 @@ src/
 
 ## Documentação
 
-Para detalhes técnicos, diagramas e fluxos do sistema, consulte a [documentação completa do projeto](/A3-final-escrito%20(8).pdf).
+Para detalhes técnicos, diagramas e fluxos do sistema, consulte a [documentação completa do projeto](/A3-final-escrito-_8_.html).
 
 
 ## Licença
