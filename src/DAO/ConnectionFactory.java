@@ -34,7 +34,7 @@ public class ConnectionFactory {
 
     // Método para testar a conexão 
     public static void testarConexao() {
-        try (Connection conn = getConnection()) {
+        try {
             System.out.println("Conexão com o banco de dados estabelecida com sucesso!");
         } catch (RuntimeException e) {
             Throwable causa = e.getCause();

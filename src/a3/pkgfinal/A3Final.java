@@ -1,6 +1,5 @@
 package a3.pkgfinal;
 
-import DAO.ProdutoDAO;
 import VIEW.MenuPrincipal;
 
 public class A3Final {

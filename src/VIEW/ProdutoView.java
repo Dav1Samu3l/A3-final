@@ -165,8 +165,8 @@ public class ProdutoView extends JFrame {
         JButton btnEntrada = new JButton("Entrada");
         JButton btnSaida = new JButton("Saída");
 
-        btnEntrada.addActionListener(e -> atualizarQuantidade(1));
-        btnSaida.addActionListener(e -> atualizarQuantidade(-1));
+        btnEntrada.addActionListener(_ -> atualizarQuantidade(1));
+        btnSaida.addActionListener(_ -> atualizarQuantidade(-1));
         JButton btnReajustar = new JButton("Reajustar Preços");
 
         buttonPanel.add(btnEntrada);
@@ -204,7 +204,7 @@ public class ProdutoView extends JFrame {
         btnAdicionar.addActionListener(this::adicionarProduto);
         btnEditar.addActionListener(this::editarProduto);
         btnRemover.addActionListener(this::removerProduto);
-        btnLimpar.addActionListener(e -> limparCampos());
+        btnLimpar.addActionListener(_ -> limparCampos());
 
         tabela.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting() && tabela.getSelectedRow() != -1) {

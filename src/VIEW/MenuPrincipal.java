@@ -41,10 +41,10 @@ public class MenuPrincipal extends JFrame {
         btnSair.setPreferredSize(buttonSize);
 
         // Listeners dos botões
-        btnCategorias.addActionListener(e -> new CategoriaView("", "", "").setVisible(true));
-        btnProdutos.addActionListener(e -> new ProdutoView().setVisible(true));
-        btnSair.addActionListener(e -> System.exit(0));
-        btnRelatorios.addActionListener(e -> new RelatorioView().setVisible(true));
+        btnCategorias.addActionListener(_ -> new CategoriaView().setVisible(true));
+        btnProdutos.addActionListener(_ -> new ProdutoView().setVisible(true));
+        btnSair.addActionListener(_ -> System.exit(0));
+        btnRelatorios.addActionListener(_ -> new RelatorioView().setVisible(true));
 
         // Adiciona os botões ao painel
         panel.add(btnCategorias);
