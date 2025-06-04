@@ -13,21 +13,23 @@ public class CategoriaDAO {
     // Obtém o maior ID existente na tabela
     public int maiorID() throws SQLException {
         String sql = "SELECT MAX(id) FROM categoria";
-        try (Connection conexao = ConnectionFactory.getConnection();
-                Statement stmt = conexao.createStatement();
-                ResultSet rs = stmt.executeQuery(sql)) {
+        try (Connection conexao = ConnectionFactory.getConnection(); Statement stmt = conexao.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
             return rs.next() ? rs.getInt(1) : 0;
         }
     }
 
     // Insere nova categoria e captura ID gerado
     public boolean inserir(Categoria categoria) {
+        if (categoriaExiste(categoria)) {
+            System.err.println("Já existe uma categoria com estes memos valores.");
+            return false;
+        }
+
         String sql = "INSERT INTO categoria (nome, tamanho, embalagem)"
                 + " VALUES (?, ?, ?)";
 
-        try (Connection conexao = ConnectionFactory.getConnection();
-                PreparedStatement stmt = conexao.prepareStatement(sql,
-                        Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection conexao = ConnectionFactory.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql,
+                Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, categoria.getNome());
             stmt.setString(2, categoria.getTamanho());
             stmt.setString(3, categoria.getEmbalagem());
@@ -46,12 +48,32 @@ public class CategoriaDAO {
         return false;
     }
 
+    // metodo auxiliar para nao duplicar categoria
+    public boolean categoriaExiste(Categoria categoria) {
+        String sql = "SELECT COUNT(*) FROM categoria WHERE nome = ? AND tamanho = ? AND embalagem = ?";
+
+        try (Connection conexao = ConnectionFactory.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql)) {
+
+            stmt.setString(1, categoria.getNome());
+            stmt.setString(2, categoria.getTamanho());
+            stmt.setString(3, categoria.getEmbalagem());
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro ao verificar categoria existente: " + e.getMessage());
+        }
+        return false;
+    }
+
     // Atualiza dados de categoria existente
     public boolean atualizar(Categoria categoria) {
         String sql = "UPDATE categoria SET nome=?, tamanho=?, embalagem=? WHERE id=?";
 
-        try (Connection conexao = ConnectionFactory.getConnection();
-                PreparedStatement stmt = conexao.prepareStatement(sql)) {
+        try (Connection conexao = ConnectionFactory.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
             stmt.setString(1, categoria.getNome());
             stmt.setString(2, categoria.getTamanho());
@@ -75,8 +97,7 @@ public class CategoriaDAO {
 
         String sql = "DELETE FROM categoria WHERE id=?";
 
-        try (Connection conexao = ConnectionFactory.getConnection();
-                PreparedStatement stmt = conexao.prepareStatement(sql)) {
+        try (Connection conexao = ConnectionFactory.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
             return stmt.executeUpdate() > 0;
@@ -90,8 +111,7 @@ public class CategoriaDAO {
     private boolean existemProdutosAssociados(int categoriaId) {
         String sql = "SELECT COUNT(*) FROM produto WHERE categoria_id = ?";
 
-        try (Connection conexao = ConnectionFactory.getConnection();
-                PreparedStatement stmt = conexao.prepareStatement(sql)) {
+        try (Connection conexao = ConnectionFactory.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
             stmt.setInt(1, categoriaId);
             try (ResultSet rs = stmt.executeQuery()) {
@@ -109,8 +129,7 @@ public class CategoriaDAO {
     public Categoria buscarPorId(int id) {
         String sql = "SELECT * FROM categoria WHERE id=?";
 
-        try (Connection conexao = ConnectionFactory.getConnection();
-                PreparedStatement stmt = conexao.prepareStatement(sql)) {
+        try (Connection conexao = ConnectionFactory.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
@@ -133,9 +152,7 @@ public class CategoriaDAO {
         List<Categoria> categorias = new ArrayList<>();
         String sql = "SELECT * FROM categoria ORDER BY nome";
 
-        try (Connection conexao = ConnectionFactory.getConnection();
-                Statement stmt = conexao.createStatement();
-                ResultSet rs = stmt.executeQuery(sql)) {
+        try (Connection conexao = ConnectionFactory.getConnection(); Statement stmt = conexao.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
                 categorias.add(new Categoria(
@@ -155,7 +172,3 @@ public class CategoriaDAO {
         return new ArrayList<>(listarTodos());
     }
 }
-
-
-
-

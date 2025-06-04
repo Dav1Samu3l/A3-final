@@ -26,7 +26,8 @@ public class CategoriaView extends JFrame {
     private JRadioButton rbLata, rbVidro, rbPlastico;
     private JRadioButton[] radioEmbalagens;
 
-    public CategoriaView(String string, String string1, String string2) {
+    // Construtor da classe CategoriaView.
+    public CategoriaView() {
         categoriaDAO = new CategoriaDAO();
         initComponents();
         setMinimumSize(new Dimension(500, 300));
@@ -34,12 +35,14 @@ public class CategoriaView extends JFrame {
         setLocationRelativeTo(null);
     }
 
+// Inicializa todos os componentes da interface gráfica.
     private void initComponents() {
         setTitle("Gerenciamento de Categorias");
         setSize(600, 450);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
+
         JPanel panel = new JPanel(new BorderLayout(10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
@@ -74,7 +77,6 @@ public class CategoriaView extends JFrame {
         rbLata = new JRadioButton("Lata");
         rbVidro = new JRadioButton("Vidro");
         rbPlastico = new JRadioButton("Plástico");
-
         radioEmbalagens = new JRadioButton[]{rbLata, rbVidro, rbPlastico};
         grupoEmbalagem.add(rbLata);
         grupoEmbalagem.add(rbVidro);
@@ -152,7 +154,7 @@ public class CategoriaView extends JFrame {
         btnAdicionar.addActionListener(this::adicionarCategoria);
         btnEditar.addActionListener(this::editarCategoria);
         btnRemover.addActionListener(this::removerCategoria);
-        btnLimpar.addActionListener(e -> limparCampos());
+        btnLimpar.addActionListener(_ -> limparCampos());
 
         tabela.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting() && tabela.getSelectedRow() != -1) {
@@ -163,6 +165,7 @@ public class CategoriaView extends JFrame {
         add(panel);
     }
 
+    // Carrega os dados das categorias do banco de dados para a tabela.
     private void carregarDados() {
         modeloTabela.setRowCount(0);
         List<Categoria> categorias = categoriaDAO.listarTodos();
@@ -171,25 +174,39 @@ public class CategoriaView extends JFrame {
         }
     }
 
+    //     * Adiciona uma nova categoria após validar os campos.
     private void adicionarCategoria(ActionEvent e) {
         String nome = txtNome.getText();
         String tamanho = getTamanhoSelecionado();
         String embalagem = getEmbalagemSelecionada();
 
+        // Valida campos vazios
         if (nome.isEmpty() || tamanho == null || embalagem == null) {
             JOptionPane.showMessageDialog(this, "Preencha todos os campos!", "Erro", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        if (categoriaDAO.inserir(new Categoria(nome, tamanho, embalagem))) {
-            JOptionPane.showMessageDialog(this, "Categoria adicionada com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+        Categoria novaCategoria = new Categoria(nome, tamanho, embalagem);
+
+        // Verifica se a categoria já existe
+        if (categoriaDAO.categoriaExiste(novaCategoria)) {
+            JOptionPane.showMessageDialog(this,
+                    "Esta categoria já está cadastrada: " + nome + " (" + tamanho + ", " + embalagem + ")",
+                    "Erro", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Se não existir,. insere no banco
+        if (categoriaDAO.inserir(novaCategoria)) {
+            JOptionPane.showMessageDialog(this, "Categoria cadastrada com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             carregarDados();
             limparCampos();
         } else {
-            JOptionPane.showMessageDialog(this, "Erro ao adicionar categoria!", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Falha ao cadastrar categoria.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
 
+    // Edita uma categoria existente selecionada na tabela.
     private void editarCategoria(ActionEvent e) {
         int selectedRow = tabela.getSelectedRow();
         if (selectedRow == -1) {
@@ -217,6 +234,7 @@ public class CategoriaView extends JFrame {
         }
     }
 
+    //     * Remove uma categoria selecionada na tabela.
     private void removerCategoria(ActionEvent e) {
         int selectedRow = tabela.getSelectedRow();
         if (selectedRow == -1) {
@@ -241,6 +259,7 @@ public class CategoriaView extends JFrame {
         }
     }
 
+    //Preenche os campos do formulário com os dados da linha selecionada tabela.
     private void preencherCampos() {
         int selectedRow = tabela.getSelectedRow();
         txtNome.setText(tabela.getValueAt(selectedRow, 1).toString());
@@ -256,6 +275,7 @@ public class CategoriaView extends JFrame {
         }
     }
 
+// Limpa todos os campos do formulário e a seleção da tabela.
     private void limparCampos() {
         txtNome.setText("");
         grupoTamanho.clearSelection();
@@ -263,6 +283,7 @@ public class CategoriaView extends JFrame {
         tabela.clearSelection();
     }
 
+    //  Obtém o tamanho selecionado nos radio buttons.
     private String getTamanhoSelecionado() {
         for (JRadioButton radio : radioTamanhos) {
             if (radio.isSelected()) {
@@ -272,6 +293,7 @@ public class CategoriaView extends JFrame {
         return null;
     }
 
+    //      Obtém a embalagem selecionada nos radio buttons.
     private String getEmbalagemSelecionada() {
         for (JRadioButton radio : radioEmbalagens) {
             if (radio.isSelected()) {
