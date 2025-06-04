@@ -29,6 +29,7 @@ public class RelatorioView extends JFrame {
         setTitle("Relatórios");
         setSize(1000, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         abas = new JTabbedPane();
 
@@ -74,43 +75,43 @@ public class RelatorioView extends JFrame {
         return new JScrollPane(tabela);
     } // 
 
-   private JScrollPane criarPainelBalanco() {
-    DefaultTableModel modelo = new DefaultTableModel(
-            new Object[]{"Produto", "Quantidade", "Preço Unitário", "Valor Total"}, 0) {
-        @Override
-        public boolean isCellEditable(int row, int column) {
-            return false;
+    private JScrollPane criarPainelBalanco() {
+        DefaultTableModel modelo = new DefaultTableModel(
+                new Object[]{"Produto", "Quantidade", "Preço Unitário", "Valor Total"}, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        List<Relatorio> relatorios = produtoDAO.gerarBalanco();
+
+        int quantidadeTotal = 0;
+        double valorTotalGeral = 0.0;
+
+        for (Relatorio r : relatorios) {
+            modelo.addRow(new Object[]{
+                r.getNome(),
+                r.getQuantidade(),
+                String.format("R$ %.2f", r.getPrecoUnitario()),
+                String.format("R$ %.2f", r.getValorTotal())
+            });
+
+            quantidadeTotal += r.getQuantidade();
+            valorTotalGeral += r.getValorTotal();
         }
-    };
 
-    List<Relatorio> relatorios = produtoDAO.gerarBalanco();
-
-    int quantidadeTotal = 0;
-    double valorTotalGeral = 0.0;
-
-    for (Relatorio r : relatorios) {
+        // Linha de total geral
         modelo.addRow(new Object[]{
-            r.getNome(),
-            r.getQuantidade(),
-            String.format("R$ %.2f", r.getPrecoUnitario()),
-            String.format("R$ %.2f", r.getValorTotal())
+            "TOTAL GERAL",
+            quantidadeTotal,
+            "", // ?????? Coluna de Preço Unitário não é necessária na linha total ?????????
+            String.format("R$ %.2f", valorTotalGeral)
         });
 
-        quantidadeTotal += r.getQuantidade();
-        valorTotalGeral += r.getValorTotal();
+        JTable tabela = new JTable(modelo);
+        return new JScrollPane(tabela);
     }
-
-    // Linha de total geral
-    modelo.addRow(new Object[]{
-        "TOTAL GERAL",
-        quantidadeTotal, 
-        "", // ?????? Coluna de Preço Unitário não é necessária na linha total ?????????
-        String.format("R$ %.2f", valorTotalGeral) 
-    });
-
-    JTable tabela = new JTable(modelo);
-    return new JScrollPane(tabela);
-}
 
     private JScrollPane criarPainelCategoria() {
         DefaultTableModel modelo = new DefaultTableModel(

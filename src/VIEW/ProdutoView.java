@@ -34,6 +34,7 @@ public class ProdutoView extends JFrame {
         setTitle("Gerenciamento de Produtos");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         // Painel principal com BorderLayout
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
@@ -442,54 +443,56 @@ public class ProdutoView extends JFrame {
             }
         }
     }
-    
+
     private void reajustarPrecos(ActionEvent e) {
-    try {
-        String input = JOptionPane.showInputDialog(
-            this,
-            "Percentual de reajuste (%):",
-            "Reajuste de Preços",
-            JOptionPane.QUESTION_MESSAGE
-        );
-        
-        if (input == null || input.trim().isEmpty()) return;
-        
-        double percentual = Double.parseDouble(input);
-        
-        int confirm = JOptionPane.showConfirmDialog(
-            this,
-            "Deseja aplicar " + percentual + "% de reajuste em TODOS os produtos?",
-            "Confirmação",
-            JOptionPane.YES_NO_OPTION
-        );
-        
-        if (confirm == JOptionPane.YES_OPTION) {
-            if (produtoDAO.reajustarPrecos(percentual)) {
-                JOptionPane.showMessageDialog(
+        try {
+            String input = JOptionPane.showInputDialog(
                     this,
-                    "Reajuste aplicado com sucesso!",
-                    "Sucesso",
-                    JOptionPane.INFORMATION_MESSAGE
-                );
-                carregarDados(); // Atualiza a tabela
-            } else {
-                JOptionPane.showMessageDialog(
+                    "Percentual de reajuste (%):",
+                    "Reajuste de Preços",
+                    JOptionPane.QUESTION_MESSAGE
+            );
+
+            if (input == null || input.trim().isEmpty()) {
+                return;
+            }
+
+            double percentual = Double.parseDouble(input);
+
+            int confirm = JOptionPane.showConfirmDialog(
                     this,
-                    "Erro ao aplicar reajuste",
+                    "Deseja aplicar " + percentual + "% de reajuste em TODOS os produtos?",
+                    "Confirmação",
+                    JOptionPane.YES_NO_OPTION
+            );
+
+            if (confirm == JOptionPane.YES_OPTION) {
+                if (produtoDAO.reajustarPrecos(percentual)) {
+                    JOptionPane.showMessageDialog(
+                            this,
+                            "Reajuste aplicado com sucesso!",
+                            "Sucesso",
+                            JOptionPane.INFORMATION_MESSAGE
+                    );
+                    carregarDados(); // Atualiza a tabela
+                } else {
+                    JOptionPane.showMessageDialog(
+                            this,
+                            "Erro ao aplicar reajuste",
+                            "Erro",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+                }
+            }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Valor inválido! Use números decimais (ex: 10.5)",
                     "Erro",
                     JOptionPane.ERROR_MESSAGE
-                );
-            }
+            );
         }
-    } catch (NumberFormatException ex) {
-        JOptionPane.showMessageDialog(
-            this,
-            "Valor inválido! Use números decimais (ex: 10.5)",
-            "Erro",
-            JOptionPane.ERROR_MESSAGE
-        );
     }
-}
 
     private void limparCampos() {
         txtNome.setText("");

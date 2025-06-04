@@ -9,6 +9,7 @@ import java.awt.Frame;
 public class MenuPrincipal extends JFrame {
 
     public static void main(String[] args) {
+
         // NÃO REMOVER ! Garante modelo de threading do Swing.
         // Evita bugs dificeis de diagnosticar em produção.
         SwingUtilities.invokeLater(() -> new MenuPrincipal().setVisible(true));
@@ -20,6 +21,7 @@ public class MenuPrincipal extends JFrame {
         // metodo para feixar tod a aplicação
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);// abilita botão close
         setLocationRelativeTo(null);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         // Painel principal com BorderLayout para centralização
         JPanel mainContainer = new JPanel(new BorderLayout());
@@ -62,13 +64,17 @@ public class MenuPrincipal extends JFrame {
                     panel.setLayout(new GridBagLayout());
                     GridBagConstraints gbc = new GridBagConstraints();
                     gbc.insets = new Insets(15, 15, 15, 15); // Espaçamento interno
-                    gbc.gridx = 0; gbc.gridy = 0;
+                    gbc.gridx = 0;
+                    gbc.gridy = 0;
                     panel.add(btnCategorias, gbc);
-                    gbc.gridx = 1; gbc.gridy = 0;
+                    gbc.gridx = 1;
+                    gbc.gridy = 0;
                     panel.add(btnProdutos, gbc);
-                    gbc.gridx = 0; gbc.gridy = 1;
+                    gbc.gridx = 0;
+                    gbc.gridy = 1;
                     panel.add(btnRelatorios, gbc);
-                    gbc.gridx = 1; gbc.gridy = 1;
+                    gbc.gridx = 1;
+                    gbc.gridy = 1;
                     panel.add(btnSair, gbc);
                     panel.setBorder(BorderFactory.createEmptyBorder(100, 200, 100, 200)); // Margens largas
                 } else {
