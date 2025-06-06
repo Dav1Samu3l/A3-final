@@ -56,9 +56,9 @@ src/
 
 
 
-## Documentação
 
-Para detalhes técnicos, diagramas e fluxos do sistema, consulte a [documentação completa do projeto]( https://dav1samu3l.github.io/A3-final/ ).
+
+
 
 
 ## Licença
