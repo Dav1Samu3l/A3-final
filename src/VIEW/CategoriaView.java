@@ -35,7 +35,7 @@ public class CategoriaView extends JFrame {
         setLocationRelativeTo(null);
     }
 
-// Inicializa todos os componentes da interface gráfica.
+    // Inicializa todos os componentes da interface gráfica.
     private void initComponents() {
         setTitle("Gerenciamento de Categorias");
         setSize(600, 450);
@@ -63,7 +63,7 @@ public class CategoriaView extends JFrame {
         rbMedio = new JRadioButton("Médio");
         rbGrande = new JRadioButton("Grande");
 
-        radioTamanhos = new JRadioButton[]{rbPequeno, rbMedio, rbGrande};
+        radioTamanhos = new JRadioButton[] { rbPequeno, rbMedio, rbGrande };
         grupoTamanho.add(rbPequeno);
         grupoTamanho.add(rbMedio);
         grupoTamanho.add(rbGrande);
@@ -77,7 +77,7 @@ public class CategoriaView extends JFrame {
         rbLata = new JRadioButton("Lata");
         rbVidro = new JRadioButton("Vidro");
         rbPlastico = new JRadioButton("Plástico");
-        radioEmbalagens = new JRadioButton[]{rbLata, rbVidro, rbPlastico};
+        radioEmbalagens = new JRadioButton[] { rbLata, rbVidro, rbPlastico };
         grupoEmbalagem.add(rbLata);
         grupoEmbalagem.add(rbVidro);
         grupoEmbalagem.add(rbPlastico);
@@ -131,7 +131,7 @@ public class CategoriaView extends JFrame {
         // ========== TABELA ==========
         // Modelo de tabela não editável
         modeloTabela = new DefaultTableModel(
-                new Object[]{"ID", "Nome", "Tamanho", "Embalagem"},
+                new Object[] { "ID", "Nome", "Tamanho", "Embalagem" },
                 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -170,11 +170,11 @@ public class CategoriaView extends JFrame {
         modeloTabela.setRowCount(0);
         List<Categoria> categorias = categoriaDAO.listarTodos();
         for (Categoria cat : categorias) {
-            modeloTabela.addRow(new Object[]{cat.getId(), cat.getNome(), cat.getTamanho(), cat.getEmbalagem()});
+            modeloTabela.addRow(new Object[] { cat.getId(), cat.getNome(), cat.getTamanho(), cat.getEmbalagem() });
         }
     }
 
-    //     * Adiciona uma nova categoria após validar os campos.
+    // * Adiciona uma nova categoria após validar os campos.
     private void adicionarCategoria(ActionEvent e) {
         String nome = txtNome.getText();
         String tamanho = getTamanhoSelecionado();
@@ -198,7 +198,8 @@ public class CategoriaView extends JFrame {
 
         // Se não existir,. insere no banco
         if (categoriaDAO.inserir(novaCategoria)) {
-            JOptionPane.showMessageDialog(this, "Categoria cadastrada com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Categoria cadastrada com sucesso!", "Sucesso",
+                    JOptionPane.INFORMATION_MESSAGE);
             carregarDados();
             limparCampos();
         } else {
@@ -210,7 +211,8 @@ public class CategoriaView extends JFrame {
     private void editarCategoria(ActionEvent e) {
         int selectedRow = tabela.getSelectedRow();
         if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Selecione uma categoria para editar!", "Aviso", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Selecione uma categoria para editar!", "Aviso",
+                    JOptionPane.WARNING_MESSAGE);
             return;
         }
 
@@ -226,7 +228,8 @@ public class CategoriaView extends JFrame {
 
         Categoria categoria = new Categoria(id, nome, tamanho, embalagem);
         if (categoriaDAO.atualizar(categoria)) {
-            JOptionPane.showMessageDialog(this, "Categoria atualizada com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Categoria atualizada com sucesso!", "Sucesso",
+                    JOptionPane.INFORMATION_MESSAGE);
             carregarDados();
             limparCampos();
         } else {
@@ -234,11 +237,12 @@ public class CategoriaView extends JFrame {
         }
     }
 
-    //     * Remove uma categoria selecionada na tabela.
+    // * Remove uma categoria selecionada na tabela.
     private void removerCategoria(ActionEvent e) {
         int selectedRow = tabela.getSelectedRow();
         if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Selecione uma categoria para remover!", "Aviso", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Selecione uma categoria para remover!", "Aviso",
+                    JOptionPane.WARNING_MESSAGE);
             return;
         }
 
@@ -246,20 +250,21 @@ public class CategoriaView extends JFrame {
         String nomeCategoria = tabela.getValueAt(selectedRow, 1).toString();
 
         if (categoriaDAO.deletar(id)) {
-            JOptionPane.showMessageDialog(this, "Categoria removida com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Categoria removida com sucesso!", "Sucesso",
+                    JOptionPane.INFORMATION_MESSAGE);
             carregarDados();
             limparCampos();
         } else {
             JOptionPane.showMessageDialog(this,
                     "Não é possível excluir '" + nomeCategoria + "'!\n\n"
-                    + "Motivo: Existem produtos associados a esta categoria.\n"
-                    + "Remova primeiro os produtos ou altere sua categoria.",
+                            + "Motivo: Existem produtos associados a esta categoria.\n"
+                            + "Remova primeiro os produtos ou altere sua categoria.",
                     "Erro: Categoria com Produtos Associados",
                     JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    //Preenche os campos do formulário com os dados da linha selecionada tabela.
+    // Preenche os campos do formulário com os dados da linha selecionada tabela.
     private void preencherCampos() {
         int selectedRow = tabela.getSelectedRow();
         txtNome.setText(tabela.getValueAt(selectedRow, 1).toString());
@@ -275,7 +280,7 @@ public class CategoriaView extends JFrame {
         }
     }
 
-// Limpa todos os campos do formulário e a seleção da tabela.
+    // Limpa todos os campos do formulário e a seleção da tabela.
     private void limparCampos() {
         txtNome.setText("");
         grupoTamanho.clearSelection();
@@ -283,7 +288,7 @@ public class CategoriaView extends JFrame {
         tabela.clearSelection();
     }
 
-    //  Obtém o tamanho selecionado nos radio buttons.
+    // Obtém o tamanho selecionado nos radio buttons.
     private String getTamanhoSelecionado() {
         for (JRadioButton radio : radioTamanhos) {
             if (radio.isSelected()) {
@@ -293,7 +298,7 @@ public class CategoriaView extends JFrame {
         return null;
     }
 
-    //      Obtém a embalagem selecionada nos radio buttons.
+    // Obtém a embalagem selecionada nos radio buttons.
     private String getEmbalagemSelecionada() {
         for (JRadioButton radio : radioEmbalagens) {
             if (radio.isSelected()) {
