@@ -26,7 +26,7 @@ public class CategoriaView extends JFrame {
     private JRadioButton rbLata, rbVidro, rbPlastico;
     private JRadioButton[] radioEmbalagens;
 
-    public CategoriaView(String string, String string1, String string2) {
+    public CategoriaView() {
         categoriaDAO = new CategoriaDAO();
         initComponents();
         setMinimumSize(new Dimension(500, 300));

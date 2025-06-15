@@ -5,6 +5,9 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.Frame;
+import VIEW.CategoriaView;
+import VIEW.ProdutoView;
+import VIEW.RelatorioView;
 
 public class MenuPrincipal extends JFrame {
 
